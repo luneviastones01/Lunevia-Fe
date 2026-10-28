@@ -1,6 +1,6 @@
 import { useEffect, lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -37,6 +37,15 @@ export interface AppProps {
   routerProps?: any;
 }
 
+// Automatically scroll to the top of the page on route changes
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
 // Global keyboard shortcut: Ctrl + Shift + H opens admin portal
 function AdminShortcutListener() {
   const navigate = useNavigate();
@@ -65,6 +74,7 @@ export default function App({ initialData, RouterComponent, routerProps }: AppPr
               <Toaster />
               <Sonner />
               <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }} {...(routerProps || {})}>
+                <ScrollToTop />
                 <AdminShortcutListener />
                 <Navbar />
                 <Suspense fallback={<div className="min-h-screen bg-background" />}>

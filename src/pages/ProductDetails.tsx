@@ -2,7 +2,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useProducts } from "@/contexts/ProductsContext";
 import { ArrowLeft, MessageCircle, Share2, Sparkles, Check } from "lucide-react";
 import { siteConfig } from "@/config/site";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import SEO from "@/components/SEO";
 
@@ -11,6 +11,10 @@ export default function ProductDetails() {
   const navigate = useNavigate();
   const { products } = useProducts();
   const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
 
   const product = products.find((p) => p.id === id);
   const allImages = (product?.images && product.images.length > 0)
