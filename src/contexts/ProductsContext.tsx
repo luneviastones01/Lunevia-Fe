@@ -85,7 +85,7 @@ export function ProductsProvider({
     try {
       setIsLoading(true);
       const res = await fetch(`${API_BASE}/products?limit=100`, {
-        signal: AbortSignal.timeout(3000), // quick fallback if backend is offline
+        signal: AbortSignal.timeout(10000), // allow 10s for serverless cold start
       });
       if (res.ok) {
         const json = await res.json();
@@ -116,7 +116,7 @@ export function ProductsProvider({
   const fetchCategories = useCallback(async () => {
     try {
       const res = await fetch(`${API_BASE}/categories`, {
-        signal: AbortSignal.timeout(3000),
+        signal: AbortSignal.timeout(10000), // allow 10s for serverless cold start
       });
       if (res.ok) {
         const json = await res.json();
