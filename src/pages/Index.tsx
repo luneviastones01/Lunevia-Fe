@@ -57,23 +57,9 @@ export default function Index() {
     }
   };
 
+  // When opening or returning to Home, always start cleanly at the top hero section
   useEffect(() => {
-    const lastId = sessionStorage.getItem("lunevia_last_product_id");
-    if (lastId) {
-      const timer = setTimeout(() => {
-        const el = document.getElementById(`product-card-${lastId}`);
-        if (el) {
-          el.scrollIntoView({ block: "center", behavior: "instant" });
-        } else {
-          const savedY = sessionStorage.getItem("lunevia_scroll_/");
-          if (savedY) {
-            window.scrollTo({ top: Number(savedY), behavior: "instant" });
-          }
-        }
-        sessionStorage.removeItem("lunevia_last_product_id");
-      }, 50);
-      return () => clearTimeout(timer);
-    }
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }, []);
 
   const categories = ["All", ...Array.from(new Set(products.map((p) => p.category)))];

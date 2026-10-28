@@ -37,17 +37,17 @@ export interface AppProps {
   routerProps?: any;
 }
 
-// Instant scroll to top when visiting a new page (no scroll animation)
+// Instant scroll to top when visiting a new page or returning to Home (no scroll animation)
 function ScrollToTop() {
   const location = useLocation();
   const navType = useNavigationType();
 
   useEffect(() => {
-    const isBack = navType === "POP" || location.state?.fromBack;
-    if (!isBack) {
+    // Unconditionally scroll to top if on Home page, or when visiting a new page
+    if (location.pathname === "/" || navType !== "POP") {
       window.scrollTo(0, 0);
     }
-  }, [location.pathname, navType, location.state]);
+  }, [location.pathname, navType]);
 
   return null;
 }

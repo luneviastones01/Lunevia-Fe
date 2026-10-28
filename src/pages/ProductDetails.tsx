@@ -98,10 +98,12 @@ export default function ProductDetails() {
         <div className="flex items-center justify-between mb-8">
           <button
             onClick={() => {
-              if (window.history.length > 1) {
+              if (isFromHome) {
+                navigate("/");
+              } else if (window.history.length > 1) {
                 navigate(-1);
               } else {
-                navigate(fromPath || "/shop", { state: { fromBack: true } });
+                navigate("/shop");
               }
             }}
             className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer"

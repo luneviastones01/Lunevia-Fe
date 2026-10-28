@@ -16,9 +16,9 @@ export default function ProductCard({ product, index = 0 }: Props) {
   const currentPath = typeof window !== "undefined" ? window.location.pathname : "/";
 
   const handleCardClick = () => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && currentPath === "/shop") {
       sessionStorage.setItem("lunevia_last_product_id", product.id);
-      sessionStorage.setItem("lunevia_scroll_" + currentPath, String(window.scrollY));
+      sessionStorage.setItem("lunevia_scroll_/shop", String(window.scrollY));
     }
   };
 
