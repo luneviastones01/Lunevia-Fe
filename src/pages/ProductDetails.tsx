@@ -1,4 +1,4 @@
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
 import { useProducts } from "@/contexts/ProductsContext";
 import { ArrowLeft, MessageCircle, Share2, Sparkles, Check } from "lucide-react";
 import { siteConfig } from "@/config/site";
@@ -18,6 +18,11 @@ export default function ProductDetails() {
     : (product?.image ? [product.image] : ["/placeholder.svg"]);
   const [activeImage, setActiveImage] = useState<string>("");
   const currentImage = activeImage && allImages.includes(activeImage) ? activeImage : allImages[0];
+  const location = useLocation();
+  const fromPath = (location.state as any)?.from;
+  const isFromHome = fromPath === "/";
+  const backLabel = isFromHome ? "Back to Home" : "Back to Catalogue";
+
   if (!product) {
     return (
       <div className="min-h-screen pt-24 flex flex-col items-center justify-center text-center px-6">
@@ -96,12 +101,12 @@ export default function ProductDetails() {
               if (window.history.length > 1) {
                 navigate(-1);
               } else {
-                navigate("/shop", { state: { fromBack: true } });
+                navigate(fromPath || "/shop", { state: { fromBack: true } });
               }
             }}
-            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
           >
-            <ArrowLeft size={16} /> Back to Catalogue
+            <ArrowLeft size={16} /> {backLabel}
           </button>
           <button
             onClick={handleShare}

@@ -1,11 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useProducts } from "@/contexts/ProductsContext";
 import ProductCard from "@/components/ProductCard";
 import SEO from "@/components/SEO";
 
 export default function Shop() {
   const { products, categories } = useProducts();
-  const [active, setActive] = useState("All");
+  const [active, setActive] = useState(() => {
+    if (typeof window !== "undefined") {
+      return sessionStorage.getItem("lunevia_shop_category") || "All";
+    }
+    return "All";
+  });
+
+  const handleCategorySelect = (cat: string) => {
+    setActive(cat);
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("lunevia_shop_category", cat);
+    }
+  };
+
+  useEffect(() => {
+    const lastId = sessionStorage.getItem("lunevia_last_product_id");
+    if (lastId) {
+      const timer = setTimeout(() => {
+        const el = document.getElementById(`product-card-${lastId}`);
+        if (el) {
+          el.scrollIntoView({ block: "center", behavior: "instant" });
+        } else {
+          const savedY = sessionStorage.getItem("lunevia_scroll_/shop");
+          if (savedY) {
+            window.scrollTo({ top: Number(savedY), behavior: "instant" });
+          }
+        }
+        sessionStorage.removeItem("lunevia_last_product_id");
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   const filtered = active === "All" ? products : products.filter((p) => p.category === active);
 
   return (
@@ -37,7 +69,7 @@ export default function Shop() {
           {categories.map((cat) => (
             <button
               key={cat}
-              onClick={() => setActive(cat)}
+              onClick={() => handleCategorySelect(cat)}
               className={`px-4 py-2 text-xs tracking-[0.15em] uppercase font-body border rounded-sm transition-all duration-300 ${
                 active === cat
                   ? "border-gold text-gold bg-gold/10"

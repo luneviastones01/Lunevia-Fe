@@ -21,7 +21,14 @@ export function useScrollFadeUp() {
 
     const observeAll = () => {
       const children = el.querySelectorAll(".scroll-fade-up:not(.scroll-fade-up--visible)");
-      children.forEach((child) => observer.observe(child));
+      children.forEach((child) => {
+        const rect = child.getBoundingClientRect();
+        if (rect.top < window.innerHeight + 80) {
+          child.classList.add("scroll-fade-up--visible");
+        } else {
+          observer.observe(child);
+        }
+      });
     };
 
     observeAll();

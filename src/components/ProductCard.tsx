@@ -13,9 +13,23 @@ export default function ProductCard({ product, index = 0 }: Props) {
     siteConfig.whatsappMessage(product.name)
   )}`;
 
+  const currentPath = typeof window !== "undefined" ? window.location.pathname : "/";
+
+  const handleCardClick = () => {
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("lunevia_last_product_id", product.id);
+      sessionStorage.setItem("lunevia_scroll_" + currentPath, String(window.scrollY));
+    }
+  };
+
   return (
-    <div className="group block relative">
-      <Link to={`/product/${product.id}`} className="block">
+    <div id={`product-card-${product.id}`} className="group block relative">
+      <Link
+        to={`/product/${product.id}`}
+        state={{ from: currentPath }}
+        onClick={handleCardClick}
+        className="block"
+      >
         <div className="relative overflow-hidden rounded-md bg-card aspect-square border border-border/40">
           <img
             src={product.image}
@@ -33,7 +47,12 @@ export default function ProductCard({ product, index = 0 }: Props) {
       </Link>
 
       <div className="mt-4 flex items-start justify-between gap-2">
-        <Link to={`/product/${product.id}`} className="space-y-1 flex-1">
+        <Link
+          to={`/product/${product.id}`}
+          state={{ from: currentPath }}
+          onClick={handleCardClick}
+          className="space-y-1 flex-1"
+        >
           <p className="text-[11px] text-muted-foreground tracking-[0.15em] uppercase font-body">
             {product.category}
           </p>
