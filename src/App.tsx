@@ -1,6 +1,6 @@
 import { useEffect, lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes, useNavigate, useLocation } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useNavigate, useLocation, useNavigationType } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -37,12 +37,17 @@ export interface AppProps {
   routerProps?: any;
 }
 
-// Automatically scroll to the top of the page on route changes
+// Smooth scroll to top only when visiting a new page (not when pressing back)
 function ScrollToTop() {
   const { pathname } = useLocation();
+  const navType = useNavigationType();
+
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+    if (navType !== "POP") {
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    }
+  }, [pathname, navType]);
+
   return null;
 }
 

@@ -12,10 +12,6 @@ export default function ProductDetails() {
   const { products } = useProducts();
   const [copied, setCopied] = useState(false);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [id]);
-
   const product = products.find((p) => p.id === id);
   const allImages = (product?.images && product.images.length > 0)
     ? product.images
