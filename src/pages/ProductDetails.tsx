@@ -92,7 +92,13 @@ export default function ProductDetails() {
       <div className="container mx-auto px-6 max-w-6xl">
         <div className="flex items-center justify-between mb-8">
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => {
+              if (window.history.length > 1) {
+                navigate(-1);
+              } else {
+                navigate("/shop", { state: { fromBack: true } });
+              }
+            }}
             className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft size={16} /> Back to Catalogue

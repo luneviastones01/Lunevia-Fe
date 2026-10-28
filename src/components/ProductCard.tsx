@@ -14,10 +14,7 @@ export default function ProductCard({ product, index = 0 }: Props) {
   )}`;
 
   return (
-    <div
-      className="group block animate-fade-up relative"
-      style={{ animationDelay: `${index * 80}ms`, animationFillMode: "forwards" }}
-    >
+    <div className="group block relative">
       <Link to={`/product/${product.id}`} className="block">
         <div className="relative overflow-hidden rounded-md bg-card aspect-square border border-border/40">
           <img
