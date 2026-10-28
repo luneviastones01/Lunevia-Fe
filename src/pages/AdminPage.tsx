@@ -68,7 +68,6 @@ export default function AdminPage() {
   const [passcode, setPasscode] = useState("");
   const [showPasscode, setShowPasscode] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [sessionConflict, setSessionConflict] = useState(false);
   const [failedAttempts, setFailedAttempts] = useState(0);
   const [cooldown, setCooldown] = useState(0);
   const [isVerifying, setIsVerifying] = useState(false);
@@ -172,7 +171,7 @@ export default function AdminPage() {
     }
   };
 
-  // Check saved 7-day encrypted session & server lock status
+  // Restore saved 7-day encrypted session on load
   useEffect(() => {
     const savedSession = localStorage.getItem("lunevia_admin_session");
     const expiresAt = localStorage.getItem("lunevia_admin_session_expires");
@@ -181,7 +180,7 @@ export default function AdminPage() {
       const expTime = parseInt(expiresAt, 10);
       if (Date.now() < expTime) {
         setIsAuthenticated(true);
-        // Verify with server that this session is still the single active one
+        // Verify token signature with server
         fetch(`${API_BASE}/auth/verify-session`, {
           method: "POST",
           headers: {
@@ -195,7 +194,7 @@ export default function AdminPage() {
               localStorage.removeItem("lunevia_admin_session");
               localStorage.removeItem("lunevia_admin_session_expires");
               setIsAuthenticated(false);
-              toast.error("Admin session ended or cleared. Please log in again.");
+              toast.error("Admin session ended. Please log in again.");
             }
           })
           .catch(() => {});
@@ -204,16 +203,6 @@ export default function AdminPage() {
         localStorage.removeItem("lunevia_admin_session_expires");
         toast.info("Session expired. Please log in again.");
       }
-    } else {
-      // No session on this device: check if another device is currently holding the single session
-      fetch(`${API_BASE}/auth/session-status`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data?.locked) {
-            setSessionConflict(true);
-          }
-        })
-        .catch(() => {});
     }
 
     const storedLockout = sessionStorage.getItem("lunevia_admin_lockout_until");
@@ -269,16 +258,9 @@ export default function AdminPage() {
         return;
       }
 
-      if (res.status === 409) {
-        setSessionConflict(true);
-        toast.error("Access restricted. An administrative session is currently active.");
-        return;
-      }
-
       const data = await res.json().catch(() => ({}));
 
       if (res.ok) {
-        setSessionConflict(false);
         sessionStorage.setItem("lunevia_admin_passcode", trimmed);
         if (data?.sessionToken && data?.expiresAt) {
           localStorage.setItem("lunevia_admin_session", data.sessionToken);
@@ -303,7 +285,6 @@ export default function AdminPage() {
       }
     } catch {
       if (trimmed === "1234") {
-        setSessionConflict(false);
         sessionStorage.setItem("lunevia_admin_passcode", trimmed);
         const expiresAt = Date.now() + 7 * 24 * 60 * 60 * 1000;
         localStorage.setItem("lunevia_admin_session", `offline_${Date.now()}`);
@@ -334,7 +315,6 @@ export default function AdminPage() {
     localStorage.removeItem("lunevia_admin_session");
     localStorage.removeItem("lunevia_admin_session_expires");
     setIsAuthenticated(false);
-    setSessionConflict(false);
     setPasscode("");
     setEditingProduct(null);
     navigate("/");
@@ -496,20 +476,7 @@ export default function AdminPage() {
             </div>
           ) : null}
 
-          {sessionConflict ? (
-            <div className="p-6 bg-secondary/40 border border-border/80 rounded-lg text-center space-y-2 animate-fade-in">
-              <div className="w-10 h-10 rounded-full bg-secondary border border-border flex items-center justify-center mx-auto text-muted-foreground">
-                <Lock size={18} />
-              </div>
-              <h2 className="text-sm font-medium text-foreground">
-                Console Currently Unavailable
-              </h2>
-              <p className="text-xs text-muted-foreground font-body leading-relaxed max-w-xs mx-auto">
-                An administrative session is currently in progress. Access is restricted at this time.
-              </p>
-            </div>
-          ) : (
-            <form onSubmit={handleVerifyPasscode} className="space-y-4">
+          <form onSubmit={handleVerifyPasscode} className="space-y-4">
               <div className="relative">
                 <input
                   type={showPasscode ? "text" : "password"}
@@ -542,7 +509,6 @@ export default function AdminPage() {
                 {isVerifying ? "Verifying Credentials..." : isLocked ? `Locked (${cooldown}s)` : "Unlock Dashboard"}
               </button>
             </form>
-          )}
         </div>
       </div>
     );
