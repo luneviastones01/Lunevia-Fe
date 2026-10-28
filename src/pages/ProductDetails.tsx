@@ -113,11 +113,13 @@ export default function ProductDetails() {
               src={product.image}
               alt=""
               aria-hidden="true"
+              decoding="async"
               className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-25 scale-125 pointer-events-none"
             />
             <img
               src={product.image}
               alt={product.name}
+              decoding="async"
               className="relative z-10 w-full h-full max-h-[520px] object-contain rounded"
             />
             {product.featured && (

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -10,12 +10,14 @@ import { HomepageProvider } from "@/contexts/HomepageContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Index from "./pages/Index";
-import Shop from "./pages/Shop";
-import ProductDetails from "./pages/ProductDetails";
-import AdminPage from "./pages/AdminPage";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import NotFound from "./pages/NotFound";
+
+// Lazy-load sub-routes and heavy admin portal to keep initial JS bundle small and fast
+const Shop = lazy(() => import("./pages/Shop"));
+const ProductDetails = lazy(() => import("./pages/ProductDetails"));
+const AdminPage = lazy(() => import("./pages/AdminPage"));
+const About = lazy(() => import("./pages/About"));
+const Contact = lazy(() => import("./pages/Contact"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -65,20 +67,22 @@ export default function App({ initialData, RouterComponent, routerProps }: AppPr
               <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }} {...(routerProps || {})}>
                 <AdminShortcutListener />
                 <Navbar />
-                <Routes>
-                  {/* Public Showcase & Catalogue */}
-                  <Route path="/" element={<Index />} />
-                  <Route path="/shop" element={<Shop />} />
-                  <Route path="/product/:id" element={<ProductDetails />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/contact" element={<Contact />} />
+                <Suspense fallback={<div className="min-h-screen bg-background" />}>
+                  <Routes>
+                    {/* Public Showcase & Catalogue */}
+                    <Route path="/" element={<Index />} />
+                    <Route path="/shop" element={<Shop />} />
+                    <Route path="/product/:id" element={<ProductDetails />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/contact" element={<Contact />} />
 
-                  {/* Private / Hidden Admin Catalog Manager */}
-                  <Route path="/catalog-admin" element={<AdminPage />} />
-                  <Route path="/admin" element={<AdminPage />} />
+                    {/* Private / Hidden Admin Catalog Manager */}
+                    <Route path="/catalog-admin" element={<AdminPage />} />
+                    <Route path="/admin" element={<AdminPage />} />
 
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </Suspense>
                 <Footer />
               </Router>
             </TooltipProvider>

@@ -9,6 +9,13 @@ const API_BASE = import.meta.env.VITE_API_URL
     : "/api");
 const API_HOST = API_BASE.replace(/\/api\/?$/, "");
 
+// Auto-compress & convert to WebP/AVIF via Cloudinary on-the-fly transformations
+export function optimizeCloudinaryUrl(url: string, width = 800): string {
+  if (!url || typeof url !== "string") return "/placeholder.svg";
+  if (!url.includes("res.cloudinary.com") || url.includes("f_auto")) return url;
+  return url.replace("/upload/", `/upload/f_auto,q_auto,w_${width}/`);
+}
+
 export interface AddProductData {
   name: string;
   price?: number;
@@ -97,9 +104,11 @@ export function ProductsProvider({
             price: p.price || 0,
             category: typeof p.category === "object" && p.category?.name ? p.category.name : (p.category || "Specimen"),
             description: p.description || "",
-            image: (p.images && p.images[0]?.url)
-              ? (p.images[0].url.startsWith("http") ? p.images[0].url : `${API_HOST}${p.images[0].url}`)
-              : (p.image || "/placeholder.svg"),
+            image: optimizeCloudinaryUrl(
+              (p.images && p.images[0]?.url)
+                ? (p.images[0].url.startsWith("http") ? p.images[0].url : `${API_HOST}${p.images[0].url}`)
+                : (p.image || "/placeholder.svg")
+            ),
             featured: Boolean(p.featured),
           }));
           setProducts(mapped);
