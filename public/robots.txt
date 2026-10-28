@@ -3,4 +3,4 @@ Allow: /
 Disallow: /catalog-admin
 Disallow: /admin
 
-Sitemap: https://luneviashop.vercel.app/sitemap.xml
+Sitemap: https://www.xn--shoplunvia-h7a.com/sitemap.xml
