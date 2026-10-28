@@ -82,8 +82,8 @@ export default function AdminPage() {
   const [description, setDescription] = useState("");
   const [imageType, setImageType] = useState<"file" | "url">("file");
   const [imageUrl, setImageUrl] = useState("");
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string>("");
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [featured, setFeatured] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -95,8 +95,9 @@ export default function AdminPage() {
   const [editDescription, setEditDescription] = useState("");
   const [editImageType, setEditImageType] = useState<"file" | "url">("file");
   const [editImageUrl, setEditImageUrl] = useState("");
-  const [editImageFile, setEditImageFile] = useState<File | null>(null);
-  const [editImagePreview, setEditImagePreview] = useState("");
+  const [editExistingImages, setEditExistingImages] = useState<string[]>([]);
+  const [editImageFiles, setEditImageFiles] = useState<File[]>([]);
+  const [editImagePreviews, setEditImagePreviews] = useState<string[]>([]);
   const [editFeatured, setEditFeatured] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -322,19 +323,37 @@ export default function AdminPage() {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImageFile(file);
-      setImagePreview(URL.createObjectURL(file));
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const selected = Array.from(files);
+      setImageFiles((prev) => [...prev, ...selected]);
+      const newPreviews = selected.map((f) => URL.createObjectURL(f));
+      setImagePreviews((prev) => [...prev, ...newPreviews]);
     }
   };
 
+  const removeImageFile = (index: number) => {
+    setImageFiles((prev) => prev.filter((_, i) => i !== index));
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const handleEditFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setEditImageFile(file);
-      setEditImagePreview(URL.createObjectURL(file));
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const selected = Array.from(files);
+      setEditImageFiles((prev) => [...prev, ...selected]);
+      const newPreviews = selected.map((f) => URL.createObjectURL(f));
+      setEditImagePreviews((prev) => [...prev, ...newPreviews]);
     }
+  };
+
+  const removeEditNewFile = (index: number) => {
+    setEditImageFiles((prev) => prev.filter((_, i) => i !== index));
+    setEditImagePreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const removeEditExistingImage = (index: number) => {
+    setEditExistingImages((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleAddProduct = async (e: React.FormEvent) => {
@@ -352,13 +371,17 @@ export default function AdminPage() {
 
     setIsSubmitting(true);
     try {
+      const parsedUrls = imageType === "url" && imageUrl.trim()
+        ? imageUrl.split(/[\n,]+/).map((u) => u.trim()).filter(Boolean)
+        : [];
+
       await addProduct({
         name: name.trim(),
         price: 0,
         category: finalCategory,
         description: description.trim(),
-        image: imageType === "url" ? imageUrl.trim() : undefined,
-        imageFile: imageType === "file" ? imageFile : null,
+        images: parsedUrls.length > 0 ? parsedUrls : undefined,
+        imageFiles: imageType === "file" && imageFiles.length > 0 ? imageFiles : null,
         featured,
       });
 
@@ -367,8 +390,8 @@ export default function AdminPage() {
       setCustomCatInput("");
       setDescription("");
       setImageUrl("");
-      setImageFile(null);
-      setImagePreview("");
+      setImageFiles([]);
+      setImagePreviews([]);
       setFeatured(false);
       setActiveTab("products");
     } finally {
@@ -382,9 +405,11 @@ export default function AdminPage() {
     setEditCategory(p.category);
     setEditCustomCat("");
     setEditDescription(p.description || "");
-    setEditImagePreview(p.image);
+    const initialImages = p.images && p.images.length > 0 ? p.images : (p.image ? [p.image] : []);
+    setEditExistingImages(initialImages);
+    setEditImageFiles([]);
+    setEditImagePreviews([]);
     setEditImageUrl("");
-    setEditImageFile(null);
     setEditFeatured(Boolean(p.featured));
   };
 
@@ -404,12 +429,17 @@ export default function AdminPage() {
 
     setIsUpdating(true);
     try {
+      const parsedEditUrls = editImageType === "url" && editImageUrl.trim()
+        ? editImageUrl.split(/[\n,]+/).map((u) => u.trim()).filter(Boolean)
+        : [];
+      const combinedImages = [...editExistingImages, ...parsedEditUrls];
+
       await updateProduct(editingProduct.id, {
         name: editName.trim(),
         category: finalCategory,
         description: editDescription.trim(),
-        image: editImageType === "url" && editImageUrl.trim() ? editImageUrl.trim() : undefined,
-        imageFile: editImageType === "file" ? editImageFile : null,
+        images: combinedImages,
+        imageFiles: editImageType === "file" && editImageFiles.length > 0 ? editImageFiles : null,
         featured: editFeatured,
       });
       setEditingProduct(null);
@@ -698,7 +728,7 @@ export default function AdminPage() {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <label className="block text-xs uppercase tracking-wider font-body text-muted-foreground">
-                      Replace Image (Optional)
+                      Specimen Images (Manage & Add More)
                     </label>
                     <div className="flex items-center gap-2 text-xs">
                       <button
@@ -708,7 +738,7 @@ export default function AdminPage() {
                           editImageType === "file" ? "bg-gold text-primary-foreground font-medium" : "text-muted-foreground"
                         }`}
                       >
-                        <Upload size={12} className="inline mr-1" /> Browse File
+                        <Upload size={12} className="inline mr-1" /> Browse Files
                       </button>
                       <button
                         type="button"
@@ -717,43 +747,84 @@ export default function AdminPage() {
                           editImageType === "url" ? "bg-gold text-primary-foreground font-medium" : "text-muted-foreground"
                         }`}
                       >
-                        <LinkIcon size={12} className="inline mr-1" /> Image URL
+                        <LinkIcon size={12} className="inline mr-1" /> Add URLs
                       </button>
                     </div>
                   </div>
 
+                  {/* Existing specimen images */}
+                  {editExistingImages.length > 0 && (
+                    <div className="space-y-1.5">
+                      <span className="text-[11px] text-muted-foreground">Existing specimen images:</span>
+                      <div className="flex flex-wrap gap-2">
+                        {editExistingImages.map((img, idx) => (
+                          <div key={idx} className="relative w-20 h-20 rounded border border-border overflow-hidden group">
+                            <img src={img} alt={`Existing ${idx + 1}`} className="w-full h-full object-cover" />
+                            {idx === 0 && (
+                              <span className="absolute bottom-1 left-1 bg-gold text-primary-foreground text-[8px] px-1 py-0.5 rounded font-semibold">
+                                Cover
+                              </span>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => removeEditExistingImage(idx)}
+                              className="absolute top-1 right-1 p-1 bg-black/80 hover:bg-red-600 text-white rounded-full transition-colors"
+                              title="Delete this image"
+                            >
+                              <X size={10} />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Add more files or URLs */}
                   {editImageType === "file" ? (
                     <div className="border border-dashed border-border rounded-lg p-4 text-center">
                       <input
                         type="file"
                         accept="image/*"
                         id="edit-file-input"
+                        multiple
                         onChange={handleEditFileChange}
                         className="hidden"
                       />
-                      <label htmlFor="edit-file-input" className="cursor-pointer text-xs text-foreground font-body">
-                        {editImageFile ? editImageFile.name : "Click to select replacement image file"}
+                      <label htmlFor="edit-file-input" className="cursor-pointer text-xs text-foreground font-body flex flex-col items-center gap-1.5">
+                        <Upload size={18} className="text-muted-foreground" />
+                        <span>Click to select one or multiple new images</span>
+                        <span className="text-[10px] text-muted-foreground">JPG, PNG, WebP up to 15MB each</span>
                       </label>
                     </div>
                   ) : (
-                    <input
-                      type="url"
-                      placeholder="https://example.com/new-image.jpg"
+                    <textarea
+                      rows={2}
+                      placeholder="https://example.com/new-angle.jpg (one URL per line or separated by commas)"
                       value={editImageUrl}
-                      onChange={(e) => {
-                        setEditImageUrl(e.target.value);
-                        setEditImagePreview(e.target.value);
-                      }}
-                      className="w-full px-4 py-2.5 bg-background border border-border rounded text-sm focus:outline-none focus:border-gold"
+                      onChange={(e) => setEditImageUrl(e.target.value)}
+                      className="w-full px-4 py-2 bg-background border border-border rounded text-sm focus:outline-none focus:border-gold font-mono text-xs"
                     />
                   )}
 
-                  {editImagePreview && (
-                    <div className="flex items-center gap-3 pt-1">
-                      <div className="relative w-16 h-16 rounded border border-border overflow-hidden">
-                        <img src={editImagePreview} alt="Preview" className="w-full h-full object-cover" />
+                  {/* Newly selected file previews */}
+                  {editImagePreviews.length > 0 && (
+                    <div className="space-y-1.5">
+                      <span className="text-[11px] text-muted-foreground">Newly selected images:</span>
+                      <div className="flex flex-wrap gap-2">
+                        {editImagePreviews.map((preview, idx) => (
+                          <div key={idx} className="relative w-20 h-20 rounded border border-border overflow-hidden group">
+                            <img src={preview} alt={`New preview ${idx + 1}`} className="w-full h-full object-cover" />
+                            <button
+                              type="button"
+                              onClick={() => removeEditNewFile(idx)}
+                              className="absolute top-1 right-1 p-1 bg-black/80 hover:bg-red-600 text-white rounded-full transition-colors"
+                              title="Remove new image"
+                            >
+                              <X size={10} />
+                            </button>
+                          </div>
+                        ))}
                       </div>
-                      <span className="text-[11px] text-muted-foreground">Current Image Preview</span>
                     </div>
                   )}
                 </div>
@@ -1068,7 +1139,7 @@ export default function AdminPage() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <label className="block text-xs uppercase tracking-wider font-body text-muted-foreground">
-                    Specimen Image (Stored locally first, then uploaded to Cloudinary on save)
+                    Specimen Images (Select multiple images)
                   </label>
                   <div className="flex items-center gap-2 text-xs">
                     <button
@@ -1078,7 +1149,7 @@ export default function AdminPage() {
                         imageType === "file" ? "bg-gold text-primary-foreground font-medium" : "text-muted-foreground"
                       }`}
                     >
-                      <Upload size={12} className="inline mr-1" /> Browse File
+                      <Upload size={12} className="inline mr-1" /> Browse Files
                     </button>
                     <button
                       type="button"
@@ -1087,44 +1158,73 @@ export default function AdminPage() {
                         imageType === "url" ? "bg-gold text-primary-foreground font-medium" : "text-muted-foreground"
                       }`}
                     >
-                      <LinkIcon size={12} className="inline mr-1" /> Image URL
+                      <LinkIcon size={12} className="inline mr-1" /> Image URLs
                     </button>
                   </div>
                 </div>
 
                 {imageType === "file" ? (
-                  <div className="border-2 border-dashed border-border/80 hover:border-gold/50 rounded-lg p-6 text-center transition-colors">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      id="product-file-input"
-                      onChange={handleFileChange}
-                      className="hidden"
-                    />
-                    <label htmlFor="product-file-input" className="cursor-pointer flex flex-col items-center gap-2">
-                      <Upload size={24} className="text-muted-foreground" />
-                      <span className="text-xs text-foreground font-body">
-                        {imageFile ? imageFile.name : "Click to select image file from computer"}
-                      </span>
-                      <span className="text-[11px] text-muted-foreground">JPG, PNG, WebP up to 15MB</span>
-                    </label>
+                  <div>
+                    <div className="border-2 border-dashed border-border/80 hover:border-gold/50 rounded-lg p-6 text-center transition-colors">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        id="product-file-input"
+                        multiple
+                        onChange={handleFileChange}
+                        className="hidden"
+                      />
+                      <label htmlFor="product-file-input" className="cursor-pointer flex flex-col items-center gap-2">
+                        <Upload size={24} className="text-muted-foreground" />
+                        <span className="text-xs text-foreground font-body">
+                          Click to select one or multiple images from your computer
+                        </span>
+                        <span className="text-[11px] text-muted-foreground">
+                          JPG, PNG, WebP up to 15MB each (you can select multiple files at once)
+                        </span>
+                      </label>
+                    </div>
+
+                    {imagePreviews.length > 0 && (
+                      <div className="mt-3 space-y-2">
+                        <div className="text-xs text-muted-foreground">
+                          {imagePreviews.length} image{imagePreviews.length > 1 ? "s" : ""} selected (first image will be the primary cover):
+                        </div>
+                        <div className="flex flex-wrap gap-3">
+                          {imagePreviews.map((preview, idx) => (
+                            <div key={idx} className="relative w-24 h-24 rounded border border-border overflow-hidden group">
+                              <img src={preview} alt={`Preview ${idx + 1}`} className="w-full h-full object-cover" />
+                              {idx === 0 && (
+                                <span className="absolute bottom-1 left-1 bg-gold text-primary-foreground text-[9px] px-1.5 py-0.5 rounded font-semibold">
+                                  Cover
+                                </span>
+                              )}
+                              <button
+                                type="button"
+                                onClick={() => removeImageFile(idx)}
+                                className="absolute top-1 right-1 p-1 bg-black/75 hover:bg-red-600 text-white rounded-full transition-colors"
+                                title="Remove image"
+                              >
+                                <X size={12} />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ) : (
-                  <input
-                    type="url"
-                    placeholder="https://example.com/images/agate.jpg"
-                    value={imageUrl}
-                    onChange={(e) => {
-                      setImageUrl(e.target.value);
-                      setImagePreview(e.target.value);
-                    }}
-                    className="w-full px-4 py-2.5 bg-background border border-border rounded text-sm focus:outline-none focus:border-gold"
-                  />
-                )}
-
-                {imagePreview && (
-                  <div className="relative w-28 h-28 rounded border border-border overflow-hidden mt-2">
-                    <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                  <div className="space-y-2">
+                    <textarea
+                      rows={3}
+                      placeholder="https://example.com/images/agate-1.jpg&#10;https://example.com/images/agate-2.jpg (one URL per line or separated by commas)"
+                      value={imageUrl}
+                      onChange={(e) => setImageUrl(e.target.value)}
+                      className="w-full px-4 py-2.5 bg-background border border-border rounded text-sm focus:outline-none focus:border-gold font-mono text-xs"
+                    />
+                    <span className="text-[11px] text-muted-foreground block">
+                      Enter multiple image URLs separated by new lines or commas.
+                    </span>
                   </div>
                 )}
               </div>

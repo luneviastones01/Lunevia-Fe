@@ -13,6 +13,11 @@ export default function ProductDetails() {
   const [copied, setCopied] = useState(false);
 
   const product = products.find((p) => p.id === id);
+  const allImages = (product?.images && product.images.length > 0)
+    ? product.images
+    : (product?.image ? [product.image] : ["/placeholder.svg"]);
+  const [activeImage, setActiveImage] = useState<string>("");
+  const currentImage = activeImage && allImages.includes(activeImage) ? activeImage : allImages[0];
   if (!product) {
     return (
       <div className="min-h-screen pt-24 flex flex-col items-center justify-center text-center px-6">
@@ -58,14 +63,14 @@ export default function ProductDetails() {
           product.description ||
           `Exquisite natural ${product.name} specimen from LUNÉVIA. Ethically sourced and handcrafted agate & mineral gemstone.`
         }
-        image={product.image}
+        image={currentImage}
         type="product"
         schema={{
           "@context": "https://schema.org",
           "@type": "Product",
           name: product.name,
           category: product.category,
-          image: [product.image],
+          image: allImages,
           description: product.description,
           brand: {
             "@type": "Brand",
@@ -103,29 +108,55 @@ export default function ProductDetails() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-          {/* Product Image */}
-          <div
-            className="relative overflow-hidden rounded-lg bg-[#0f0e0d] border border-border/50 shadow-2xl flex items-center justify-center p-3 sm:p-6 opacity-0 animate-fade-in aspect-square sm:aspect-auto sm:min-h-[460px] lg:min-h-[520px]"
-            style={{ animationFillMode: "forwards" }}
-          >
-            {/* Ambient blurred glow matching image colors */}
-            <img
-              src={product.image}
-              alt=""
-              aria-hidden="true"
-              decoding="async"
-              className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-25 scale-125 pointer-events-none"
-            />
-            <img
-              src={product.image}
-              alt={product.name}
-              decoding="async"
-              className="relative z-10 w-full h-full max-h-[520px] object-contain rounded"
-            />
-            {product.featured && (
-              <span className="absolute top-4 right-4 z-20 inline-flex items-center gap-1.5 px-3 py-1 bg-background/85 backdrop-blur-md border border-gold/40 text-gold text-[11px] font-body uppercase tracking-[0.15em] rounded-full shadow-lg">
-                <Sparkles size={12} /> Curated Piece
-              </span>
+          {/* Product Image Gallery */}
+          <div className="flex flex-col space-y-4">
+            <div
+              className="relative overflow-hidden rounded-lg bg-[#0f0e0d] border border-border/50 shadow-2xl flex items-center justify-center p-3 sm:p-6 opacity-0 animate-fade-in aspect-square sm:aspect-auto sm:min-h-[460px] lg:min-h-[520px]"
+              style={{ animationFillMode: "forwards" }}
+            >
+              {/* Ambient blurred glow matching image colors */}
+              <img
+                src={currentImage}
+                alt=""
+                aria-hidden="true"
+                decoding="async"
+                className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-25 scale-125 pointer-events-none transition-all duration-500"
+              />
+              <img
+                src={currentImage}
+                alt={product.name}
+                decoding="async"
+                className="relative z-10 w-full h-full max-h-[520px] object-contain rounded transition-all duration-300"
+              />
+              {product.featured && (
+                <span className="absolute top-4 right-4 z-20 inline-flex items-center gap-1.5 px-3 py-1 bg-background/85 backdrop-blur-md border border-gold/40 text-gold text-[11px] font-body uppercase tracking-[0.15em] rounded-full shadow-lg">
+                  <Sparkles size={12} /> Curated Piece
+                </span>
+              )}
+            </div>
+
+            {/* Thumbnail Row if more than 1 image */}
+            {allImages.length > 1 && (
+              <div className="flex items-center gap-3 overflow-x-auto pb-2 pt-1 scrollbar-none">
+                {allImages.map((img, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setActiveImage(img)}
+                    className={`relative w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${
+                      currentImage === img
+                        ? "border-gold scale-105 shadow-md shadow-gold/20"
+                        : "border-border/60 hover:border-border opacity-70 hover:opacity-100"
+                    }`}
+                  >
+                    <img
+                      src={img}
+                      alt={`${product.name} angle ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
             )}
           </div>
 

@@ -23,6 +23,8 @@ export interface AddProductData {
   description: string;
   image?: string;
   imageFile?: File | null;
+  images?: string[];
+  imageFiles?: File[] | null;
   featured?: boolean;
 }
 
@@ -33,6 +35,8 @@ export interface UpdateProductData {
   description?: string;
   image?: string;
   imageFile?: File | null;
+  images?: string[];
+  imageFiles?: File[] | null;
   featured?: boolean;
 }
 
@@ -98,19 +102,28 @@ export function ProductsProvider({
         const json = await res.json();
         const apiProducts = json?.data?.products || [];
         if (Array.isArray(apiProducts)) {
-          const mapped: Product[] = apiProducts.map((p: any) => ({
-            id: p._id || p.id,
-            name: p.name,
-            price: p.price || 0,
-            category: typeof p.category === "object" && p.category?.name ? p.category.name : (p.category || "Specimen"),
-            description: p.description || "",
-            image: optimizeCloudinaryUrl(
-              (p.images && p.images[0]?.url)
-                ? (p.images[0].url.startsWith("http") ? p.images[0].url : `${API_HOST}${p.images[0].url}`)
-                : (p.image || "/placeholder.svg")
-            ),
-            featured: Boolean(p.featured),
-          }));
+          const mapped: Product[] = apiProducts.map((p: any) => {
+            const rawImages: string[] = Array.isArray(p.images) && p.images.length > 0
+              ? p.images.map((img: any) => {
+                  const u = typeof img === "string" ? img : img?.url;
+                  return u?.startsWith("http") ? u : `${API_HOST}${u || ""}`;
+                }).filter(Boolean)
+              : (p.image ? [p.image] : []);
+
+            const optimizedImages = rawImages.map((u) => optimizeCloudinaryUrl(u));
+            const primaryImage = optimizedImages[0] || "/placeholder.svg";
+
+            return {
+              id: p._id || p.id,
+              name: p.name,
+              price: p.price || 0,
+              category: typeof p.category === "object" && p.category?.name ? p.category.name : (p.category || "Specimen"),
+              description: p.description || "",
+              image: primaryImage,
+              images: optimizedImages.length > 0 ? optimizedImages : [primaryImage],
+              featured: Boolean(p.featured),
+            };
+          });
           setProducts(mapped);
           return;
         }
@@ -166,8 +179,14 @@ export function ProductsProvider({
       formData.append("description", productData.description || "");
       formData.append("featured", String(Boolean(productData.featured)));
 
-      if (productData.imageFile) {
+      if (productData.imageFiles && productData.imageFiles.length > 0) {
+        productData.imageFiles.forEach((file) => formData.append("images", file));
+      } else if (productData.imageFile) {
         formData.append("images", productData.imageFile);
+      }
+
+      if (productData.images && productData.images.length > 0) {
+        productData.images.forEach((imgUrl) => formData.append("images", imgUrl));
       } else if (productData.image) {
         formData.append("image", productData.image);
       }
@@ -203,8 +222,14 @@ export function ProductsProvider({
         if (updateData.description !== undefined) formData.append("description", updateData.description);
         if (updateData.featured !== undefined) formData.append("featured", String(updateData.featured));
 
-        if (updateData.imageFile) {
+        if (updateData.imageFiles && updateData.imageFiles.length > 0) {
+          updateData.imageFiles.forEach((file) => formData.append("images", file));
+        } else if (updateData.imageFile) {
           formData.append("images", updateData.imageFile);
+        }
+
+        if (updateData.images && updateData.images.length > 0) {
+          updateData.images.forEach((imgUrl) => formData.append("images", imgUrl));
         } else if (updateData.image) {
           formData.append("image", updateData.image);
         }
