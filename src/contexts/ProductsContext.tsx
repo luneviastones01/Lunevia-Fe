@@ -37,7 +37,7 @@ interface ProductsContextType {
   updateProduct: (id: string, product: UpdateProductData) => Promise<boolean>;
   deleteProduct: (id: string, passcode?: string) => Promise<boolean>;
   addCategory: (category: string) => Promise<void>;
-  renameCategory: (oldName: string, newName: string) => void;
+  renameCategory: (oldName: string, newName: string) => Promise<void>;
   deleteCategory: (category: string, passcode?: string) => Promise<boolean>;
   refetchProducts: () => Promise<void>;
 }
@@ -52,46 +52,19 @@ export function ProductsProvider({
   initialData?: { products?: Product[]; categories?: string[] };
 }) {
   const [products, setProducts] = useState<Product[]>(() => {
-    if (initialData?.products && initialData.products.length > 0) {
-      return initialData.products;
-    }
+    if (initialData?.products && initialData.products.length > 0) return initialData.products;
     if (typeof window !== "undefined") {
       const winData = (window as any).__INITIAL_DATA__;
-      if (winData?.products && Array.isArray(winData.products) && winData.products.length > 0) {
-        return winData.products;
-      }
-      try {
-        const saved = localStorage.getItem("lunevia_cached_products");
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-        }
-      } catch {
-        // ignore
-      }
+      if (winData?.products && Array.isArray(winData.products) && winData.products.length > 0) return winData.products;
     }
     return initialProducts;
   });
-  const [customCategories, setCustomCategories] = useState<string[]>(() => {
-    if (typeof window !== "undefined") {
-      try {
-        const saved = localStorage.getItem("lunevia_custom_categories");
-        return saved ? JSON.parse(saved) : [];
-      } catch {
-        return [];
-      }
-    }
-    return [];
-  });
+  // Categories come entirely from the server — no localStorage cache
   const [dbCategories, setDbCategories] = useState<string[]>(() => {
-    if (initialData?.categories && initialData.categories.length > 0) {
-      return initialData.categories;
-    }
+    if (initialData?.categories && initialData.categories.length > 0) return initialData.categories;
     if (typeof window !== "undefined") {
       const winData = (window as any).__INITIAL_DATA__;
-      if (winData?.categories && Array.isArray(winData.categories)) {
-        return winData.categories;
-      }
+      if (winData?.categories && Array.isArray(winData.categories)) return winData.categories;
     }
     return [];
   });
@@ -130,13 +103,6 @@ export function ProductsProvider({
             featured: Boolean(p.featured),
           }));
           setProducts(mapped);
-          if (mapped.length > 0) {
-            try {
-              localStorage.setItem("lunevia_cached_products", JSON.stringify(mapped));
-            } catch {
-              // ignore
-            }
-          }
           return;
         }
       }
@@ -176,9 +142,8 @@ export function ProductsProvider({
     "All",
     ...Array.from(
       new Set([
-        ...products.map((p) => p.category),
         ...dbCategories,
-        ...customCategories,
+        ...products.map((p) => p.category),
       ])
     ).filter(Boolean),
   ];
@@ -207,21 +172,16 @@ export function ProductsProvider({
       if (res.ok) {
         toast.success("Specimen added & indexed in MongoDB!");
         await fetchProducts();
+        await fetchCategories();
         return true;
       } else {
         const err = await res.json().catch(() => ({}));
-        const id = Date.now().toString();
-        const localImg = productData.image || (productData.imageFile ? URL.createObjectURL(productData.imageFile) : "/placeholder.svg");
-        setProducts((prev) => [{ ...productData, id, price: productData.price || 0, image: localImg }, ...prev]);
-        toast.warning(err.message || "Added locally (Check backend connection)");
-        return true;
+        toast.error(err.message || "Failed to add product. Check backend connection.");
+        return false;
       }
     } catch {
-      const id = Date.now().toString();
-      const localImg = productData.image || (productData.imageFile ? URL.createObjectURL(productData.imageFile) : "/placeholder.svg");
-      setProducts((prev) => [{ ...productData, id, price: productData.price || 0, image: localImg }, ...prev]);
-      toast.info("Saved locally in browser catalog");
-      return true;
+      toast.error("Cannot reach server. Product not saved.");
+      return false;
     }
   };
 
@@ -302,44 +262,40 @@ export function ProductsProvider({
   const addCategory = async (category: string) => {
     const trimmed = category.trim();
     if (!trimmed) return;
-    setCustomCategories((prev) => {
-      const next = Array.from(new Set([...prev, trimmed]));
-      try {
-        localStorage.setItem("lunevia_custom_categories", JSON.stringify(next));
-      } catch {}
-      return next;
-    });
-    setDbCategories((prev) => Array.from(new Set([...prev, trimmed])));
     try {
       const res = await fetch(`${API_BASE}/categories`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...getAdminHeaders(),
-        },
+        headers: { "Content-Type": "application/json", ...getAdminHeaders() },
         body: JSON.stringify({ name: trimmed }),
       });
       if (res.ok) {
         await fetchCategories();
+      } else {
+        const err = await res.json().catch(() => ({}));
+        toast.error(err.message || "Failed to add category.");
       }
     } catch {
-      // saved locally
+      toast.error("Cannot reach server. Category not saved.");
     }
   };
 
-  const renameCategory = (oldName: string, newName: string) => {
+  const renameCategory = async (oldName: string, newName: string) => {
     if (oldName === "All" || !newName.trim()) return;
-    setProducts((prev) =>
-      prev.map((p) => (p.category === oldName ? { ...p, category: newName } : p))
-    );
-    setCustomCategories((prev) => {
-      const next = prev.map((c) => (c === oldName ? newName : c));
-      try {
-        localStorage.setItem("lunevia_custom_categories", JSON.stringify(next));
-      } catch {}
-      return next;
-    });
-    setDbCategories((prev) => prev.map((c) => (c === oldName ? newName : c)));
+    try {
+      const res = await fetch(`${API_BASE}/categories/${encodeURIComponent(oldName)}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", ...getAdminHeaders() },
+        body: JSON.stringify({ name: newName.trim() }),
+      });
+      if (res.ok) {
+        await fetchCategories();
+        await fetchProducts();
+      } else {
+        toast.error("Failed to rename category on server.");
+      }
+    } catch {
+      toast.error("Cannot reach server. Category not renamed.");
+    }
   };
 
   const deleteCategory = async (category: string, passcode?: string): Promise<boolean> => {
@@ -351,24 +307,15 @@ export function ProductsProvider({
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        if (err?.message) {
-          toast.error(err.message);
-          return false;
-        }
+        toast.error(err.message || "Failed to delete category.");
+        return false;
       }
+      await fetchCategories();
+      return true;
     } catch {
-      // offline fallback
+      toast.error("Cannot reach server. Category not deleted.");
+      return false;
     }
-
-    setCustomCategories((prev) => {
-      const next = prev.filter((c) => c !== category);
-      try {
-        localStorage.setItem("lunevia_custom_categories", JSON.stringify(next));
-      } catch {}
-      return next;
-    });
-    setDbCategories((prev) => prev.filter((c) => c !== category));
-    return true;
   };
 
   return (
