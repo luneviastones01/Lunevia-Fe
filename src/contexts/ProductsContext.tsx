@@ -6,7 +6,7 @@ const API_BASE = import.meta.env.VITE_API_URL
   ? import.meta.env.VITE_API_URL.replace(/\/+$/, "")
   : (typeof window !== "undefined" && window.location.origin.includes("localhost")
     ? "http://localhost:5000/api"
-    : "/api");
+    : "https://lunevia-be.vercel.app/api");
 const API_HOST = API_BASE.replace(/\/api\/?$/, "");
 
 // Auto-compress & convert to WebP/AVIF via Cloudinary on-the-fly transformations

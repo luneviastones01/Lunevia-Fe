@@ -2,6 +2,7 @@
   "buildCommand": "npm install --legacy-peer-deps && npm run build:client",
   "outputDirectory": "dist/client",
   "rewrites": [
+    { "source": "/api/:match*", "destination": "https://lunevia-be.vercel.app/api/:match*" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
