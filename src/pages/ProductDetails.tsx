@@ -111,7 +111,7 @@ export default function ProductDetails() {
           {/* Product Image Gallery */}
           <div className="flex flex-col space-y-4">
             <div
-              className="relative overflow-hidden rounded-lg bg-[#0f0e0d] border border-border/50 shadow-2xl flex items-center justify-center p-3 sm:p-6 opacity-0 animate-fade-in aspect-square sm:aspect-auto sm:min-h-[460px] lg:min-h-[520px]"
+              className="relative overflow-hidden rounded-lg bg-[#0f0e0d] border border-border/50 shadow-2xl flex items-center justify-center p-3 sm:p-6 opacity-0 animate-fade-in w-full aspect-square"
               style={{ animationFillMode: "forwards" }}
             >
               {/* Ambient blurred glow matching image colors */}
@@ -126,7 +126,7 @@ export default function ProductDetails() {
                 src={currentImage}
                 alt={product.name}
                 decoding="async"
-                className="relative z-10 w-full h-full max-h-[520px] object-contain rounded transition-all duration-300"
+                className="relative z-10 w-full h-full object-contain rounded transition-all duration-300"
               />
               {product.featured && (
                 <span className="absolute top-4 right-4 z-20 inline-flex items-center gap-1.5 px-3 py-1 bg-background/85 backdrop-blur-md border border-gold/40 text-gold text-[11px] font-body uppercase tracking-[0.15em] rounded-full shadow-lg">
