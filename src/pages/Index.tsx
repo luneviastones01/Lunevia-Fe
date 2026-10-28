@@ -227,9 +227,7 @@ export default function Index() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {featured.map((p, i) => (
-              <div key={p.id} className="scroll-fade-up" style={{ transitionDelay: `${i * 80}ms` }}>
-                <ProductCard product={p} index={i} />
-              </div>
+              <ProductCard key={p.id} product={p} index={i} />
             ))}
           </div>
         </FadeSection>
@@ -291,9 +289,7 @@ export default function Index() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {filtered.map((p, i) => (
-                <div key={p.id} className="scroll-fade-up" style={{ transitionDelay: `${(i % 6) * 70}ms` }}>
-                  <ProductCard product={p} index={i} />
-                </div>
+                <ProductCard key={p.id} product={p} index={i} />
               ))}
             </div>
 

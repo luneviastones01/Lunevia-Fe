@@ -7,7 +7,6 @@ export function useScrollFadeUp() {
     const el = ref.current;
     if (!el) return;
 
-    const children = el.querySelectorAll(".scroll-fade-up");
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -17,11 +16,23 @@ export function useScrollFadeUp() {
           }
         });
       },
-      { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
     );
 
-    children.forEach((child) => observer.observe(child));
-    return () => observer.disconnect();
+    const observeAll = () => {
+      const children = el.querySelectorAll(".scroll-fade-up:not(.scroll-fade-up--visible)");
+      children.forEach((child) => observer.observe(child));
+    };
+
+    observeAll();
+
+    const mutationObserver = new MutationObserver(observeAll);
+    mutationObserver.observe(el, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+      mutationObserver.disconnect();
+    };
   }, []);
 
   return ref;
