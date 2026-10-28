@@ -37,7 +37,7 @@ export interface AppProps {
   routerProps?: any;
 }
 
-// Smooth scroll to top only when visiting a new page (never when pressing back)
+// Instant scroll to top when visiting a new page (no scroll animation)
 function ScrollToTop() {
   const location = useLocation();
   const navType = useNavigationType();
@@ -45,7 +45,7 @@ function ScrollToTop() {
   useEffect(() => {
     const isBack = navType === "POP" || location.state?.fromBack;
     if (!isBack) {
-      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+      window.scrollTo(0, 0);
     }
   }, [location.pathname, navType, location.state]);
 
