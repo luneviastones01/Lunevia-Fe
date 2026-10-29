@@ -106,14 +106,12 @@ export default function AdminPage() {
 
   // Custom luxury delete confirmation modal state
   const [deleteTarget, setDeleteTarget] = useState<{ type: "product"; product: Product } | { type: "category"; name: string } | null>(null);
-  const [deletePasscode, setDeletePasscode] = useState("");
   const [deleteError, setDeleteError] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Disable background scrolling when modal is open & clear passcode
+  // Disable background scrolling when modal is open
   useEffect(() => {
     if (deleteTarget) {
-      setDeletePasscode("");
       setDeleteError("");
     }
     if (deleteTarget || editingProduct) {
@@ -129,38 +127,23 @@ export default function AdminPage() {
   const handleConfirmDelete = async () => {
     if (!deleteTarget) return;
 
-    const trimmedPin = deletePasscode.trim();
-    if (!trimmedPin) {
-      setDeleteError("Admin passcode is required to delete.");
-      return;
-    }
-
-    const currentPin = sessionStorage.getItem("lunevia_admin_passcode") || "1234";
-    if (trimmedPin !== currentPin) {
-      setDeleteError("Incorrect admin passcode.");
-      toast.error("Incorrect admin passcode. Deletion aborted.");
-      return;
-    }
-
     setIsDeleting(true);
     setDeleteError("");
 
     try {
       if (deleteTarget.type === "product") {
-        const ok = await deleteProduct(deleteTarget.product.id, trimmedPin);
+        const ok = await deleteProduct(deleteTarget.product.id);
         if (ok) {
           toast.success(`Specimen "${deleteTarget.product.name}" deleted`);
           setDeleteTarget(null);
-          setDeletePasscode("");
         } else {
           setDeleteError("Failed to delete specimen.");
         }
       } else {
-        const ok = await deleteCategory(deleteTarget.name, trimmedPin);
+        const ok = await deleteCategory(deleteTarget.name);
         if (ok) {
           toast.success(`Category "${deleteTarget.name}" deleted`);
           setDeleteTarget(null);
-          setDeletePasscode("");
         } else {
           setDeleteError("Failed to delete category.");
         }
@@ -912,42 +895,17 @@ export default function AdminPage() {
                 </div>
               )}
 
-              {/* Passcode Verification Input */}
-              <div className="text-left space-y-1.5 pt-1">
-                <label className="text-[11px] font-mono tracking-wider uppercase text-foreground/80 flex items-center gap-1.5">
-                  <Lock size={12} className="text-gold" />
-                  Enter Passcode to Confirm
-                </label>
-                <input
-                  type="password"
-                  value={deletePasscode}
-                  onChange={(e) => {
-                    setDeletePasscode(e.target.value);
-                    if (deleteError) setDeleteError("");
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      handleConfirmDelete();
-                    }
-                  }}
-                  placeholder="Admin passcode"
-                  className="w-full px-3 py-2 bg-secondary/60 border border-border focus:border-gold rounded text-xs text-foreground font-mono placeholder:text-muted-foreground focus:outline-none transition-colors"
-                  autoFocus
-                />
-                {deleteError && (
-                  <p className="text-[11px] text-destructive font-mono animate-fade-in">
-                    {deleteError}
-                  </p>
-                )}
-              </div>
+              {deleteError && (
+                <p className="text-[11px] text-destructive font-mono animate-fade-in text-center">
+                  {deleteError}
+                </p>
+              )}
 
               <div className="flex items-center justify-end gap-3 pt-3 border-t border-border/60">
                 <button
                   type="button"
                   onClick={() => {
                     setDeleteTarget(null);
-                    setDeletePasscode("");
                     setDeleteError("");
                   }}
                   disabled={isDeleting}
@@ -961,7 +919,7 @@ export default function AdminPage() {
                   disabled={isDeleting}
                   className="w-1/2 py-2.5 bg-destructive text-destructive-foreground text-xs uppercase tracking-wider font-body font-semibold rounded hover:bg-destructive/90 transition-all shadow disabled:opacity-50 flex items-center justify-center gap-1.5"
                 >
-                  {isDeleting ? "Verifying..." : "Delete Now"}
+                  {isDeleting ? "Deleting..." : "Delete Now"}
                 </button>
               </div>
             </div>
