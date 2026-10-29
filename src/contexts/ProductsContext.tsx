@@ -12,6 +12,10 @@ const API_HOST = API_BASE.replace(/\/api\/?$/, "");
 // Auto-compress & convert to WebP/AVIF via Cloudinary on-the-fly transformations
 export function optimizeCloudinaryUrl(url: string, width = 800): string {
   if (!url || typeof url !== "string") return "/placeholder.svg";
+  // Guard against truncated Cloudinary URLs with no image file/publicId
+  if (url.endsWith("/upload/f_auto") || url.endsWith("/image/upload") || url.endsWith("/upload/")) {
+    return "/placeholder.svg";
+  }
   if (!url.includes("res.cloudinary.com") || url.includes("f_auto")) return url;
   return url.replace("/upload/", `/upload/f_auto,q_auto,w_${width}/`);
 }

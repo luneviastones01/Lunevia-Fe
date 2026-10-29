@@ -355,7 +355,7 @@ export default function AdminPage() {
     setIsSubmitting(true);
     try {
       const parsedUrls = imageType === "url" && imageUrl.trim()
-        ? imageUrl.split(/[\n,]+/).map((u) => u.trim()).filter(Boolean)
+        ? imageUrl.split(/\r?\n+/).map((u) => u.trim()).filter(Boolean)
         : [];
 
       await addProduct({
@@ -413,7 +413,7 @@ export default function AdminPage() {
     setIsUpdating(true);
     try {
       const parsedEditUrls = editImageType === "url" && editImageUrl.trim()
-        ? editImageUrl.split(/[\n,]+/).map((u) => u.trim()).filter(Boolean)
+        ? editImageUrl.split(/\r?\n+/).map((u) => u.trim()).filter(Boolean)
         : [];
       const combinedImages = [...editExistingImages, ...parsedEditUrls];
 
