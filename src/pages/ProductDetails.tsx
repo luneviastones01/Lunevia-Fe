@@ -9,7 +9,7 @@ import SEO from "@/components/SEO";
 export default function ProductDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { products } = useProducts();
+  const { products, isLoading } = useProducts();
   const [copied, setCopied] = useState(false);
 
   const product = products.find((p) => p.id === id);
@@ -22,6 +22,14 @@ export default function ProductDetails() {
   const fromPath = (location.state as any)?.from;
   const isFromHome = fromPath === "/";
   const backLabel = isFromHome ? "Back to Home" : "Back to Catalogue";
+
+  if (isLoading && !product) {
+    return (
+      <div className="min-h-screen pt-24 flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   if (!product) {
     return (

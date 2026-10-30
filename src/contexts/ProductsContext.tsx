@@ -87,7 +87,7 @@ export function ProductsProvider({
 
   // Helper to get admin passcode & 7-day session header
   const getAdminHeaders = (passcode?: string) => {
-    const pin = passcode || (typeof window !== "undefined" ? sessionStorage.getItem("lunevia_admin_passcode") : null) || "1234";
+    const pin = passcode || (typeof window !== "undefined" ? sessionStorage.getItem("lunevia_admin_passcode") : null) || "";
     const session = typeof window !== "undefined" ? localStorage.getItem("lunevia_admin_session") : null;
     return {
       "x-admin-passcode": pin,
@@ -110,7 +110,8 @@ export function ProductsProvider({
             const rawImages: string[] = Array.isArray(p.images) && p.images.length > 0
               ? p.images.map((img: any) => {
                   const u = typeof img === "string" ? img : img?.url;
-                  return u?.startsWith("http") ? u : `${API_HOST}${u || ""}`;
+                  if (!u) return "";
+                  return u.startsWith("http") || u.startsWith("/") ? u : `${API_HOST}/${u}`;
                 }).filter(Boolean)
               : (p.image ? [p.image] : []);
 
