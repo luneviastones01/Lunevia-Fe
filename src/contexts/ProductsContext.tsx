@@ -69,15 +69,29 @@ export function ProductsProvider({
   const [products, setProducts] = useState<Product[]>(() => {
     if (initialData?.products && initialData.products.length > 0) return initialData.products;
     if (typeof window !== "undefined") {
+      try {
+        const cached = localStorage.getItem("lunevia_cached_products");
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch {}
       const winData = (window as any).__INITIAL_DATA__;
       if (winData?.products && Array.isArray(winData.products) && winData.products.length > 0) return winData.products;
     }
     return initialProducts;
   });
-  // Categories come entirely from the server — no localStorage cache
+  // Categories loaded from local cache first for 0ms render, updated live from API
   const [dbCategories, setDbCategories] = useState<string[]>(() => {
     if (initialData?.categories && initialData.categories.length > 0) return initialData.categories;
     if (typeof window !== "undefined") {
+      try {
+        const cached = localStorage.getItem("lunevia_cached_categories");
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch {}
       const winData = (window as any).__INITIAL_DATA__;
       if (winData?.categories && Array.isArray(winData.categories)) return winData.categories;
     }
@@ -130,6 +144,11 @@ export function ProductsProvider({
             };
           });
           setProducts(mapped);
+          if (typeof window !== "undefined") {
+            try {
+              localStorage.setItem("lunevia_cached_products", JSON.stringify(mapped));
+            } catch {}
+          }
           return;
         }
       }
@@ -153,6 +172,11 @@ export function ProductsProvider({
             .map((c: any) => (typeof c === "string" ? c : c?.name))
             .filter(Boolean);
           setDbCategories(names);
+          if (typeof window !== "undefined") {
+            try {
+              localStorage.setItem("lunevia_cached_categories", JSON.stringify(names));
+            } catch {}
+          }
         }
       }
     } catch {

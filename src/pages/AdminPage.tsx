@@ -1002,7 +1002,16 @@ export default function AdminPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {products.length === 0 ? (
+                  {isLoading && products.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={5} className="text-center py-12 text-muted-foreground font-body">
+                        <div className="flex items-center justify-center gap-2 text-gold">
+                          <RefreshCw size={16} className="animate-spin" />
+                          <span className="text-xs uppercase tracking-wider">Loading specimens...</span>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ) : products.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={5} className="text-center py-12 text-muted-foreground font-body">
                         No products currently in the catalog.

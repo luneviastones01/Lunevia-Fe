@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
+import { useNavigationType } from "react-router-dom";
 import { useProducts } from "@/contexts/ProductsContext";
 import ProductCard from "@/components/ProductCard";
 import SEO from "@/components/SEO";
 
 export default function Shop() {
-  const { products, categories } = useProducts();
+  const { products, categories, isLoading } = useProducts();
+  const navType = useNavigationType();
+
+  // If navigating from Navbar/other pages, always show "All".
+  // Only restore previous category filter when pressing browser Back button (POP) from a product.
   const [active, setActive] = useState(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && navType === "POP") {
       return sessionStorage.getItem("lunevia_shop_category") || "All";
     }
     return "All";
@@ -38,6 +43,8 @@ export default function Shop() {
     }
   }, []);
 
+  // Filter categories to only those with active specimens (or "All") so users never see an empty category by accident
+  const visibleCategories = ["All", ...categories.filter((cat) => cat !== "All" && products.some((p) => p.category === cat))];
   const filtered = active === "All" ? products : products.filter((p) => p.category === active);
 
   return (
@@ -66,7 +73,7 @@ export default function Shop() {
         </div>
 
         <div className="flex flex-wrap justify-center gap-3 mb-12">
-          {categories.map((cat) => (
+          {visibleCategories.map((cat) => (
             <button
               key={cat}
               onClick={() => handleCategorySelect(cat)}
@@ -81,8 +88,23 @@ export default function Shop() {
           ))}
         </div>
 
-        {filtered.length === 0 ? (
-          <p className="text-center text-muted-foreground font-body py-20">No products in this category yet.</p>
+        {isLoading && products.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+            <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin mb-4" />
+            <p className="text-xs uppercase tracking-widest text-gold font-body">Loading Specimens...</p>
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="text-center py-20 space-y-4">
+            <p className="text-muted-foreground font-body">No products in this category yet.</p>
+            {active !== "All" && (
+              <button
+                onClick={() => handleCategorySelect("All")}
+                className="px-5 py-2 border border-gold text-gold text-xs uppercase tracking-[0.15em] font-body hover:bg-gold/10 transition-colors"
+              >
+                View All Specimens
+              </button>
+            )}
+          </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {filtered.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
