@@ -208,8 +208,12 @@ export function ProductsProvider({
         await fetchCategories();
         return true;
       } else {
-        const err = await res.json().catch(() => ({}));
-        toast.error(err.message || "Failed to add product. Check backend connection.");
+        if (res.status === 413) {
+          toast.error("Images combined exceed upload limit (4.5MB). Please upload fewer or smaller images.");
+        } else {
+          const err = await res.json().catch(() => ({}));
+          toast.error(err.message || "Failed to add product. Check backend connection.");
+        }
         return false;
       }
     } catch {
@@ -249,6 +253,14 @@ export function ProductsProvider({
           toast.success("Specimen updated in MongoDB!");
           await fetchProducts();
           return true;
+        } else {
+          if (res.status === 413) {
+            toast.error("Images combined exceed upload limit (4.5MB). Please upload fewer or smaller images.");
+          } else {
+            const err = await res.json().catch(() => ({}));
+            toast.error(err.message || "Failed to update specimen in database.");
+          }
+          return false;
         }
       }
     } catch {

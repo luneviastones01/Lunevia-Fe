@@ -41,6 +41,45 @@ const API_BASE = import.meta.env.VITE_API_URL
     ? "http://localhost:5000/api"
     : "https://lunevia-be.vercel.app/api");
 
+// In-browser image compressor: scales high-res photos to max 1600px & ~300KB
+// Prevents multiple photos from ever exceeding Vercel's 4.5MB serverless payload limit
+async function compressImageFile(file: File, maxDim = 1600, quality = 0.82): Promise<File> {
+  if (!file.type.startsWith("image/") || file.size < 400 * 1024) return file;
+  return new Promise((resolve) => {
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      let { width, height } = img;
+      if (width > maxDim || height > maxDim) {
+        if (width > height) {
+          height = Math.round((height * maxDim) / width);
+          width = maxDim;
+        } else {
+          width = Math.round((width * maxDim) / height);
+          height = maxDim;
+        }
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return resolve(file);
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob(
+        (blob) => {
+          if (!blob || blob.size >= file.size) return resolve(file);
+          resolve(new File([blob], file.name.replace(/\.[^/.]+$/, ".jpg"), { type: "image/jpeg" }));
+        },
+        "image/jpeg",
+        quality
+      );
+    };
+    img.onerror = () => resolve(file);
+    img.src = objectUrl;
+  });
+}
+
 export default function AdminPage() {
   const navigate = useNavigate();
   const {
@@ -358,13 +397,18 @@ export default function AdminPage() {
         ? imageUrl.split(/\r?\n+/).map((u) => u.trim()).filter(Boolean)
         : [];
 
+      let filesToUpload = imageType === "file" && imageFiles.length > 0 ? imageFiles : null;
+      if (filesToUpload) {
+        filesToUpload = await Promise.all(filesToUpload.map((f) => compressImageFile(f)));
+      }
+
       await addProduct({
         name: name.trim(),
         price: 0,
         category: finalCategory,
         description: description.trim(),
         images: parsedUrls.length > 0 ? parsedUrls : undefined,
-        imageFiles: imageType === "file" && imageFiles.length > 0 ? imageFiles : null,
+        imageFiles: filesToUpload,
         featured,
       });
 
@@ -417,12 +461,17 @@ export default function AdminPage() {
         : [];
       const combinedImages = [...editExistingImages, ...parsedEditUrls];
 
+      let editFilesToUpload = editImageType === "file" && editImageFiles.length > 0 ? editImageFiles : null;
+      if (editFilesToUpload) {
+        editFilesToUpload = await Promise.all(editFilesToUpload.map((f) => compressImageFile(f)));
+      }
+
       await updateProduct(editingProduct.id, {
         name: editName.trim(),
         category: finalCategory,
         description: editDescription.trim(),
         images: combinedImages,
-        imageFiles: editImageType === "file" && editImageFiles.length > 0 ? editImageFiles : null,
+        imageFiles: editFilesToUpload,
         featured: editFeatured,
       });
       setEditingProduct(null);
