@@ -14,7 +14,7 @@ export interface SEOProps {
 export default function SEO({
   title,
   description = siteConfig.description,
-  image = "/hero-agate.jpg",
+  image = "/hero-agate.webp",
   url,
   type = "website",
   noIndex = false,
