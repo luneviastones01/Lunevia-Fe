@@ -153,6 +153,13 @@ export function HomepageProvider({
   const [config, setConfig] = useState<HomepageConfig>(() => {
     if (initialConfig) return initialConfig;
     if (typeof window !== "undefined") {
+      try {
+        const cached = localStorage.getItem("lunevia_cached_homepage");
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (parsed && typeof parsed === "object") return parsed;
+        }
+      } catch {}
       const winData = (window as any).__INITIAL_DATA__;
       if (winData?.homepageConfig) return winData.homepageConfig;
     }
@@ -161,13 +168,48 @@ export function HomepageProvider({
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
+  // Listen for centralized bootstrap updates
+  useEffect(() => {
+    const handleBootstrap = (e: CustomEvent) => {
+      const data = e.detail;
+      if (data) {
+        const merged: HomepageConfig = {
+          ...DEFAULT_CONFIG,
+          ...data,
+          hero: {
+            ...DEFAULT_CONFIG.hero,
+            ...(data.hero || {}),
+            slides: data.hero?.slides && data.hero.slides.length > 0
+              ? data.hero.slides
+              : DEFAULT_CONFIG.hero.slides,
+          },
+          brandStory: {
+            ...DEFAULT_CONFIG.brandStory,
+            ...(data.brandStory || {}),
+            image: data.brandStory?.image || DEFAULT_CONFIG.brandStory.image,
+          },
+          visibility: {
+            ...DEFAULT_CONFIG.visibility,
+            ...(data.visibility || {}),
+          },
+        };
+        setConfig(merged);
+        try {
+          localStorage.setItem("lunevia_cached_homepage", JSON.stringify(merged));
+        } catch {}
+      }
+    };
+    window.addEventListener("lunevia_bootstrap_homepage", handleBootstrap as EventListener);
+    return () => window.removeEventListener("lunevia_bootstrap_homepage", handleBootstrap as EventListener);
+  }, []);
+
   const fetchConfig = useCallback(async () => {
     try {
       const res = await fetch(`${API_BASE}/${SETTINGS_KEY}`);
       if (res.ok) {
         const data = await res.json();
         if (data) {
-          setConfig({
+          const merged: HomepageConfig = {
             ...DEFAULT_CONFIG,
             ...data,
             hero: {
@@ -186,7 +228,11 @@ export function HomepageProvider({
               ...DEFAULT_CONFIG.visibility,
               ...(data.visibility || {}),
             },
-          });
+          };
+          setConfig(merged);
+          try {
+            localStorage.setItem("lunevia_cached_homepage", JSON.stringify(merged));
+          } catch {}
         }
       }
     } catch {
@@ -196,7 +242,12 @@ export function HomepageProvider({
     }
   }, []);
 
-  useEffect(() => { fetchConfig(); }, [fetchConfig]);
+  // Fetch individually only if no cache exists; otherwise wait for bootstrap sync
+  useEffect(() => {
+    if (typeof window !== "undefined" && !localStorage.getItem("lunevia_cached_homepage")) {
+      fetchConfig();
+    }
+  }, [fetchConfig]);
 
   const updateConfig = useCallback(async (next: HomepageConfig, passcode: string) => {
     setIsSaving(true);

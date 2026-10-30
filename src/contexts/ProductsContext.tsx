@@ -110,6 +110,76 @@ export function ProductsProvider({
     };
   };
 
+  // Transform raw API product into UI Product model
+  const mapApiProducts = useCallback((apiProducts: any[]): Product[] => {
+    return apiProducts.map((p: any) => {
+      const rawImages: string[] = Array.isArray(p.images) && p.images.length > 0
+        ? p.images.map((img: any) => {
+            const u = typeof img === "string" ? img : img?.url;
+            if (!u) return "";
+            return u.startsWith("http") || u.startsWith("/") ? u : `${API_HOST}/${u}`;
+          }).filter(Boolean)
+        : (p.image ? [p.image] : []);
+
+      const optimizedImages = rawImages.map((u) => optimizeCloudinaryUrl(u));
+      const primaryImage = optimizedImages[0] || "/placeholder.svg";
+
+      return {
+        id: p._id || p.id,
+        name: p.name,
+        price: p.price || 0,
+        category: typeof p.category === "object" && p.category?.name ? p.category.name : (p.category || "Specimen"),
+        description: p.description || "",
+        image: primaryImage,
+        images: optimizedImages.length > 0 ? optimizedImages : [primaryImage],
+        featured: Boolean(p.featured),
+      };
+    });
+  }, []);
+
+  // Single aggregated bootstrap call replacing 3 separate roundtrips
+  const fetchBootstrap = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const res = await fetch(`${API_BASE}/bootstrap`, {
+        signal: AbortSignal.timeout(10000),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        // 1. Process products
+        if (Array.isArray(data.products) && data.products.length > 0) {
+          const mapped = mapApiProducts(data.products);
+          setProducts(mapped);
+          try {
+            localStorage.setItem("lunevia_cached_products", JSON.stringify(mapped));
+          } catch {}
+        }
+        // 2. Process categories
+        if (Array.isArray(data.categories)) {
+          const names = data.categories
+            .map((c: any) => (typeof c === "string" ? c : c?.name))
+            .filter(Boolean);
+          setDbCategories(names);
+          try {
+            localStorage.setItem("lunevia_cached_categories", JSON.stringify(names));
+          } catch {}
+        }
+        // 3. Dispatch homepage config to HomepageContext
+        if (data.homepageConfig && typeof window !== "undefined") {
+          window.dispatchEvent(
+            new CustomEvent("lunevia_bootstrap_homepage", { detail: data.homepageConfig })
+          );
+        }
+        return true;
+      }
+    } catch {
+      // Backend offline or fallback to individual calls
+    } finally {
+      setIsLoading(false);
+    }
+    return false;
+  }, [mapApiProducts]);
+
   const fetchProducts = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -120,29 +190,7 @@ export function ProductsProvider({
         const json = await res.json();
         const apiProducts = json?.data?.products || [];
         if (Array.isArray(apiProducts)) {
-          const mapped: Product[] = apiProducts.map((p: any) => {
-            const rawImages: string[] = Array.isArray(p.images) && p.images.length > 0
-              ? p.images.map((img: any) => {
-                  const u = typeof img === "string" ? img : img?.url;
-                  if (!u) return "";
-                  return u.startsWith("http") || u.startsWith("/") ? u : `${API_HOST}/${u}`;
-                }).filter(Boolean)
-              : (p.image ? [p.image] : []);
-
-            const optimizedImages = rawImages.map((u) => optimizeCloudinaryUrl(u));
-            const primaryImage = optimizedImages[0] || "/placeholder.svg";
-
-            return {
-              id: p._id || p.id,
-              name: p.name,
-              price: p.price || 0,
-              category: typeof p.category === "object" && p.category?.name ? p.category.name : (p.category || "Specimen"),
-              description: p.description || "",
-              image: primaryImage,
-              images: optimizedImages.length > 0 ? optimizedImages : [primaryImage],
-              featured: Boolean(p.featured),
-            };
-          });
+          const mapped = mapApiProducts(apiProducts);
           setProducts(mapped);
           if (typeof window !== "undefined") {
             try {
@@ -157,7 +205,7 @@ export function ProductsProvider({
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [mapApiProducts]);
 
   const fetchCategories = useCallback(async () => {
     try {
@@ -185,9 +233,14 @@ export function ProductsProvider({
   }, []);
 
   useEffect(() => {
-    fetchProducts();
-    fetchCategories();
-  }, [fetchProducts, fetchCategories]);
+    // Attempt single bootstrap first; fall back to individual if bootstrap fails
+    fetchBootstrap().then((success) => {
+      if (!success) {
+        fetchProducts();
+        fetchCategories();
+      }
+    });
+  }, [fetchBootstrap, fetchProducts, fetchCategories]);
 
   const categories = [
     "All",
