@@ -4,11 +4,11 @@
  * Admin can call updateConfig() to persist changes to MongoDB.
  */
 import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from "react";
-import heroAgate from "@/assets/hero-agate.jpg";
-import heroAbout from "@/assets/hero-about.jpg";
-import heroContact from "@/assets/hero-contact.jpg";
-import agate1 from "@/assets/agate-1.jpg";
-import agate3 from "@/assets/agate-3.jpg";
+import heroAgate from "@/assets/hero-agate.webp";
+import heroAbout from "@/assets/hero-about.webp";
+import heroContact from "@/assets/hero-contact.webp";
+import agate1 from "@/assets/agate-1.webp";
+import agate3 from "@/assets/agate-3.webp";
 
 const API_BASE = import.meta.env.VITE_API_URL
   ? `${import.meta.env.VITE_API_URL.replace(/\/+$/, "")}/settings`

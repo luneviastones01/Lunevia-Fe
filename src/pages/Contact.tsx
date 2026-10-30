@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
-import heroContact from "@/assets/hero-contact.jpg";
+import heroContact from "@/assets/hero-contact.webp";
 import { useScrollFadeUp } from "@/hooks/useScrollFadeUp";
 import SEO from "@/components/SEO";
 

@@ -1,5 +1,5 @@
 import { Gem, Globe, Award } from "lucide-react";
-import heroAbout from "@/assets/hero-about.jpg";
+import heroAbout from "@/assets/hero-about.webp";
 import { useScrollFadeUp } from "@/hooks/useScrollFadeUp";
 import SEO from "@/components/SEO";
 
