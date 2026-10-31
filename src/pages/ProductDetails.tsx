@@ -1,10 +1,11 @@
 import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
 import { useProducts } from "@/contexts/ProductsContext";
-import { ArrowLeft, MessageCircle, Share2, Sparkles, Check, ShieldCheck, Gem, Globe } from "lucide-react";
+import { ArrowLeft, MessageCircle, Share2, Sparkles, Check, ShieldCheck, Gem, Globe, ChevronLeft, ChevronRight } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { useState } from "react";
 import { toast } from "sonner";
 import SEO from "@/components/SEO";
+import ProductCard from "@/components/ProductCard";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -13,11 +14,14 @@ export default function ProductDetails() {
   const [copied, setCopied] = useState(false);
 
   const product = products.find((p) => p.id === id);
+  const relatedProducts = product
+    ? products.filter((p) => p.id !== product.id && p.category.toLowerCase() === product.category.toLowerCase())
+    : [];
   const allImages = (product?.images && product.images.length > 0)
     ? product.images
     : (product?.image ? [product.image] : ["/placeholder.svg"]);
-  const [activeImage, setActiveImage] = useState<string>("");
-  const currentImage = activeImage && allImages.includes(activeImage) ? activeImage : allImages[0];
+  const [activeIndex, setActiveIndex] = useState(0);
+  const currentImage = allImages[activeIndex] || allImages[0];
   const location = useLocation();
   const fromPath = (location.state as any)?.from;
   const isFromHome = fromPath === "/";
@@ -132,47 +136,74 @@ export default function ProductDetails() {
           {/* Product Image Gallery */}
           <div className="flex flex-col space-y-4">
             <div
-              className="relative overflow-hidden rounded-lg bg-[#0f0e0d] border border-border/50 shadow-2xl flex items-center justify-center p-3 sm:p-6 opacity-0 animate-fade-in w-full aspect-square"
+              className="relative overflow-hidden rounded-xl bg-card/60 border border-border/40 shadow-xl flex items-center justify-center opacity-0 animate-fade-in w-full aspect-square group"
               style={{ animationFillMode: "forwards" }}
             >
-              {/* Ambient blurred glow matching image colors */}
-              <img
-                src={currentImage}
-                alt=""
-                aria-hidden="true"
-                decoding="async"
-                className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-25 scale-125 pointer-events-none transition-all duration-500"
-              />
-              <img
-                src={currentImage}
-                alt={product.name}
-                decoding="async"
-                className="relative z-10 w-full h-full object-contain rounded transition-all duration-300"
-              />
-              {product.featured && (
-                <span className="absolute top-4 right-4 z-20 inline-flex items-center gap-1.5 px-3 py-1 bg-background/85 backdrop-blur-md border border-gold/40 text-gold text-[11px] font-body uppercase tracking-[0.15em] rounded-full shadow-lg">
-                  <Sparkles size={12} /> Curated Piece
-                </span>
+              {/* Slides container with smooth sliding transform */}
+              <div
+                className="flex w-full h-full transition-transform duration-500 ease-out"
+                style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+              >
+                {allImages.map((img, idx) => (
+                  <div key={idx} className="w-full h-full flex-shrink-0 flex items-center justify-center relative overflow-hidden bg-black/40">
+                    {/* Ambient blurred backdrop glow */}
+                    <img
+                      src={img}
+                      alt=""
+                      aria-hidden="true"
+                      decoding="async"
+                      className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-30 scale-125 pointer-events-none"
+                    />
+                    <img
+                      src={img}
+                      alt={`${product.name} - View ${idx + 1}`}
+                      decoding="async"
+                      className="relative z-10 w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* Prev / Next Slide Arrows (smooth transition) */}
+              {allImages.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setActiveIndex((prev) => (prev > 0 ? prev - 1 : allImages.length - 1))}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-background/80 backdrop-blur-md text-foreground hover:text-gold border border-border/60 opacity-0 group-hover:opacity-100 transition-all cursor-pointer shadow-lg hover:scale-110"
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeft size={18} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveIndex((prev) => (prev < allImages.length - 1 ? prev + 1 : 0))}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-background/80 backdrop-blur-md text-foreground hover:text-gold border border-border/60 opacity-0 group-hover:opacity-100 transition-all cursor-pointer shadow-lg hover:scale-110"
+                    aria-label="Next image"
+                  >
+                    <ChevronRight size={18} />
+                  </button>
+                </>
               )}
             </div>
 
             {/* Thumbnail Row if more than 1 image */}
             {allImages.length > 1 && (
-              <div className="flex items-center gap-3 overflow-x-auto pb-2 pt-1 scrollbar-none">
+              <div className="flex items-center justify-center gap-3 overflow-x-auto pb-2 pt-1 scrollbar-none">
                 {allImages.map((img, idx) => (
                   <button
                     key={idx}
                     type="button"
-                    onClick={() => setActiveImage(img)}
-                    className={`relative w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${
-                      currentImage === img
-                        ? "border-gold scale-105 shadow-md shadow-gold/20"
-                        : "border-border/60 hover:border-border opacity-70 hover:opacity-100"
+                    onClick={() => setActiveIndex(idx)}
+                    className={`relative w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all cursor-pointer bg-card/60 ${
+                      activeIndex === idx
+                        ? "border-gold scale-105 shadow-md shadow-gold/20 opacity-100"
+                        : "border-border/40 opacity-50 hover:opacity-100 hover:border-border"
                     }`}
                   >
                     <img
                       src={img}
-                      alt={`${product.name} angle ${idx + 1}`}
+                      alt={`${product.name} thumbnail ${idx + 1}`}
                       className="w-full h-full object-cover"
                     />
                   </button>
@@ -247,6 +278,34 @@ export default function ProductDetails() {
             </div>
           </div>
         </div>
+
+        {/* More Like This (Same Category) */}
+        {relatedProducts.length > 0 && (
+          <section className="mt-20 pt-12 border-t border-border/40">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+              <div>
+                <p className="text-xs uppercase tracking-[0.25em] text-gold font-body mb-2">
+                  Similar Specimens
+                </p>
+                <h2 className="font-display text-2xl md:text-3xl font-light text-foreground">
+                  More in {product.category}
+                </h2>
+              </div>
+              <Link
+                to="/shop"
+                className="text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-gold transition-colors font-body flex items-center gap-1.5"
+              >
+                View Complete Catalogue &rarr;
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+              {relatedProducts.map((p, idx) => (
+                <ProductCard key={p.id} product={p} index={idx} />
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );
