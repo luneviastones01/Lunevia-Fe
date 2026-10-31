@@ -28,10 +28,15 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <div className="mt-16 pt-8 border-t border-border/50 text-center">
-          <p className="text-xs text-muted-foreground tracking-wide">
+        <div className="mt-16 pt-8 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+          <p className="tracking-wide">
             © 2026 LUNÉVIA. All rights reserved.
           </p>
+          <div className="flex items-center gap-4">
+            <Link to="/privacy-policy" className="hover:text-gold transition-colors">
+              Privacy Policy
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
