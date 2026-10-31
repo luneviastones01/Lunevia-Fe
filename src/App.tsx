@@ -18,6 +18,7 @@ const AdminPage = lazy(() => import("./pages/AdminPage"));
 const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const TermsConditions = lazy(() => import("./pages/TermsConditions"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient({
@@ -93,6 +94,7 @@ export default function App({ initialData, RouterComponent, routerProps }: AppPr
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                    <Route path="/terms-and-conditions" element={<TermsConditions />} />
 
                     {/* Private / Hidden Admin Catalog Manager */}
                     <Route path="/catalog-admin" element={<AdminPage />} />

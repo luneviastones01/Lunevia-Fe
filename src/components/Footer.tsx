@@ -32,9 +32,13 @@ export default function Footer() {
           <p className="tracking-wide">
             © 2026 LUNÉVIA. All rights reserved.
           </p>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 sm:gap-6">
             <Link to="/privacy-policy" className="hover:text-gold transition-colors">
               Privacy Policy
+            </Link>
+            <span>•</span>
+            <Link to="/terms-and-conditions" className="hover:text-gold transition-colors">
+              Terms & Conditions
             </Link>
           </div>
         </div>
