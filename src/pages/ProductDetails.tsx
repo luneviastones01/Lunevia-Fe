@@ -1,8 +1,8 @@
 import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
 import { useProducts } from "@/contexts/ProductsContext";
-import { ArrowLeft, MessageCircle, Share2, Sparkles, Check } from "lucide-react";
+import { ArrowLeft, MessageCircle, Share2, Sparkles, Check, ShieldCheck, Gem, Globe } from "lucide-react";
 import { siteConfig } from "@/config/site";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import SEO from "@/components/SEO";
 
@@ -187,31 +187,50 @@ export default function ProductDetails() {
             style={{ animationDelay: "150ms", animationFillMode: "forwards" }}
           >
             <div>
-              <p className="text-xs tracking-[0.25em] uppercase text-gold font-body mb-2">
-                {product.category}
-              </p>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-xs tracking-[0.25em] uppercase text-gold font-body">
+                  {product.category}
+                </span>
+                <span className="text-border">•</span>
+                <span className="text-[11px] text-muted-foreground uppercase tracking-widest font-body">
+                  Ref #{product.id.slice(-6)}
+                </span>
+              </div>
               <h1 className="font-display text-3xl md:text-4xl font-light text-foreground">
                 {product.name}
               </h1>
             </div>
 
-            <div className="border-b border-border/50 pb-4">
-              <span className="text-xs text-muted-foreground uppercase tracking-widest font-body">
-                Specimen Reference #{product.id.slice(-6)}
-              </span>
-            </div>
-
-            <div>
-              <h3 className="text-xs uppercase tracking-[0.2em] font-body text-muted-foreground mb-3">
-                About this Piece
+            <div className="p-4 rounded-lg bg-secondary/30 border border-border/40">
+              <h3 className="text-xs uppercase tracking-[0.2em] font-body text-gold/90 mb-2 font-medium">
+                Specimen Provenance & Details
               </h3>
-              <p className="text-sm md:text-base text-foreground/80 leading-relaxed font-body">
+              <p className="text-sm text-foreground/80 leading-relaxed font-body">
                 {product.description || "A natural gemstone masterpiece, carefully selected for its distinctive crystalline banding and mineral purity."}
               </p>
             </div>
 
+            {/* Collector Highlights */}
+            <div className="grid grid-cols-3 gap-3 border-y border-border/40 py-4 text-center">
+              <div className="flex flex-col items-center">
+                <Gem size={16} className="text-gold mb-1.5" />
+                <span className="text-[11px] font-medium font-body text-foreground">100% Natural</span>
+                <span className="text-[10px] text-muted-foreground">Untreated Mineral</span>
+              </div>
+              <div className="flex flex-col items-center border-x border-border/40">
+                <ShieldCheck size={16} className="text-gold mb-1.5" />
+                <span className="text-[11px] font-medium font-body text-foreground">Authentic</span>
+                <span className="text-[10px] text-muted-foreground">Curator Verified</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <Globe size={16} className="text-gold mb-1.5" />
+                <span className="text-[11px] font-medium font-body text-foreground">Worldwide</span>
+                <span className="text-[10px] text-muted-foreground">Insured Transit</span>
+              </div>
+            </div>
+
             {/* Inquire on WhatsApp */}
-            <div className="pt-6 space-y-3">
+            <div className="pt-2 space-y-3">
               <a
                 href={whatsappUrl}
                 target="_blank"
@@ -219,11 +238,11 @@ export default function ProductDetails() {
                 className="w-full flex items-center justify-center gap-3 px-8 py-4 bg-[#25D366] hover:bg-[#20ba59] text-white rounded font-body text-sm tracking-[0.15em] uppercase font-medium shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 <MessageCircle size={20} />
-                Inquire on WhatsApp
+                Inquire With Gemologist
               </a>
 
               <p className="text-xs text-center text-muted-foreground font-body">
-                Direct inquiry with our gemologist for availability, custom mounting & worldwide delivery.
+                Direct concierge chat for high-resolution video clips, dimensions & international shipping.
               </p>
             </div>
           </div>
