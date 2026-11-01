@@ -223,12 +223,16 @@ export default function Index() {
 
       {/* ── STATS STRIP ── */}
       {vis.stats && (
-        <FadeSection className="border-y border-border/40 py-10 bg-surface/30">
-          <div className="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <FadeSection className="border-y border-border/40 py-8 md:py-10 bg-surface/30">
+          <div className="container mx-auto px-5 md:px-6 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 text-center">
             {config.stats.map((s) => (
-              <div key={s.label} className="scroll-fade-up">
-                <p className="font-display text-3xl md:text-4xl text-gold font-light">{s.value}</p>
-                <p className="font-body text-xs tracking-[0.2em] uppercase text-muted-foreground mt-1">{s.label}</p>
+              <div key={s.label} className="scroll-fade-up flex flex-col items-center justify-center">
+                <p className="font-display text-2xl sm:text-3xl md:text-4xl text-gold font-light leading-none flex items-center justify-center gap-0.5">
+                  {s.value}
+                </p>
+                <p className="font-body text-[11px] md:text-xs tracking-[0.15em] md:tracking-[0.2em] uppercase text-muted-foreground mt-2 max-w-[140px] text-balance">
+                  {s.label}
+                </p>
               </div>
             ))}
           </div>
@@ -237,11 +241,11 @@ export default function Index() {
 
       {/* ── FEATURED CURATED PICKS ── */}
       {vis.featured && featured.length > 0 && (
-        <FadeSection className="container mx-auto px-6 py-24">
-          <div className="text-center mb-16 scroll-fade-up">
-            <p className="text-xs tracking-[0.3em] uppercase text-gold font-body mb-3">Curated Selection</p>
-            <h2 className="font-display text-3xl md:text-4xl font-light">Featured Specimens</h2>
-            <div className="w-12 h-px bg-gold mx-auto mt-4" />
+        <FadeSection className="container mx-auto px-5 md:px-6 py-14 md:py-24">
+          <div className="text-center mb-10 md:mb-16 scroll-fade-up">
+            <p className="text-xs tracking-[0.2em] md:tracking-[0.3em] uppercase text-gold font-body mb-2 md:mb-3">Curated Selection</p>
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-light">Featured Specimens</h2>
+            <div className="w-12 h-px bg-gold mx-auto mt-3 md:mt-4" />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {featured.map((p, i) => (
@@ -253,17 +257,17 @@ export default function Index() {
 
       {/* ── BRAND STORY ── */}
       {vis.brandStory && (
-        <FadeSection className="bg-surface/30 border-y border-border/40 py-24">
-          <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-6 scroll-fade-up">
-              <p className="text-xs tracking-[0.3em] uppercase text-gold font-body">Our Story</p>
-              <h2 className="font-display text-3xl md:text-5xl font-light leading-snug">
+        <FadeSection className="bg-surface/30 border-y border-border/40 py-14 md:py-24">
+          <div className="container mx-auto px-5 md:px-6 grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-center">
+            <div className="space-y-4 md:space-y-6 scroll-fade-up">
+              <p className="text-xs tracking-[0.2em] md:tracking-[0.3em] uppercase text-gold font-body">Our Story</p>
+              <h2 className="font-display text-2xl sm:text-3xl md:text-5xl font-light leading-snug">
                 {config.brandStory.heading}<br />
                 <em className="gold-text-gradient">{config.brandStory.headingEm}</em>
               </h2>
-              <p className="font-body text-sm text-muted-foreground leading-relaxed max-w-md">{config.brandStory.body1}</p>
-              <p className="font-body text-sm text-muted-foreground leading-relaxed max-w-md">{config.brandStory.body2}</p>
-              <Link to="/about" className="inline-flex items-center gap-2 text-sm tracking-[0.15em] uppercase text-gold font-body hover:gap-4 transition-all duration-300">
+              <p className="font-body text-sm md:text-base text-[#B8B8C4] leading-[1.7] max-w-md">{config.brandStory.body1}</p>
+              <p className="font-body text-sm md:text-base text-[#B8B8C4] leading-[1.7] max-w-md">{config.brandStory.body2}</p>
+              <Link to="/about" className="inline-flex items-center gap-2 text-xs md:text-sm tracking-[0.15em] uppercase text-gold font-body min-h-[44px] hover:gap-4 transition-all duration-300">
                 Discover Our Philosophy <ArrowRight size={14} />
               </Link>
             </div>
@@ -271,9 +275,11 @@ export default function Index() {
               <img
                 src={config.brandStory?.image || heroAbout}
                 alt="Gemologist selecting specimens"
-                className="w-full h-80 lg:h-[480px] object-cover"
+                width={800}
+                height={600}
+                className="w-full aspect-[4/3] md:aspect-auto md:h-[480px] object-cover"
               />
-              <div className="absolute inset-0 border border-gold/20 translate-x-3 translate-y-3 pointer-events-none" />
+              <div className="hidden md:block absolute inset-0 border border-gold/20 translate-x-3 translate-y-3 pointer-events-none" />
             </div>
           </div>
         </FadeSection>
@@ -281,23 +287,24 @@ export default function Index() {
 
       {/* ── FULL CATALOGUE ── */}
       {vis.catalog && (
-        <section ref={catalogRef} className="container mx-auto px-6 py-24">
+        <section ref={catalogRef} className="container mx-auto px-5 md:px-6 py-14 md:py-24">
           <FadeSection>
-            <div className="text-center mb-12 scroll-fade-up">
-              <p className="text-xs tracking-[0.3em] uppercase text-gold font-body mb-3">The Collection</p>
-              <h2 className="font-display text-3xl md:text-4xl font-light">Explore Our Catalogue</h2>
-              <div className="w-12 h-px bg-gold mx-auto mt-4" />
+            <div className="text-center mb-8 md:mb-12 scroll-fade-up">
+              <p className="text-xs tracking-[0.2em] md:tracking-[0.3em] uppercase text-gold font-body mb-2 md:mb-3">The Collection</p>
+              <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-light">Explore Our Catalogue</h2>
+              <div className="w-12 h-px bg-gold mx-auto mt-3 md:mt-4" />
             </div>
 
-            <div className="flex flex-wrap justify-center gap-3 mb-12 scroll-fade-up">
+            {/* Horizontally scrollable row on mobile with 44px min tap targets */}
+            <div className="flex md:flex-wrap items-center md:justify-center gap-2.5 md:gap-3 mb-8 md:mb-12 scroll-fade-up overflow-x-auto scrollbar-none pb-2 pt-1 -mx-5 px-5 md:mx-0 md:px-0">
               {categories.map((cat) => (
                 <button
                   key={cat}
                   onClick={() => handleCategorySelect(cat)}
-                  className={`font-body text-xs tracking-[0.15em] uppercase px-5 py-2 border transition-all duration-300 ${
+                  className={`min-h-[44px] font-body text-xs tracking-[0.15em] uppercase px-5 py-2.5 border transition-all duration-300 flex-shrink-0 flex items-center justify-center cursor-pointer ${
                     activeCategory === cat
-                      ? "border-gold bg-gold text-primary-foreground"
-                      : "border-border/60 text-muted-foreground hover:border-gold hover:text-gold"
+                      ? "border-gold bg-gold text-primary-foreground font-medium"
+                      : "border-border/80 text-[#B5B5C0] hover:border-gold hover:text-gold"
                   }`}
                 >
                   {cat}
@@ -330,24 +337,24 @@ export default function Index() {
 
       {/* ── WHY LUNÉVIA ── */}
       {vis.features && (
-        <FadeSection className="bg-surface/30 border-y border-border/40 py-24">
-          <div className="container mx-auto px-6">
-            <div className="text-center mb-16 scroll-fade-up">
-              <p className="text-xs tracking-[0.3em] uppercase text-gold font-body mb-3">Our Promise</p>
-              <h2 className="font-display text-3xl md:text-4xl font-light">Why Collectors Choose LUNÉVIA</h2>
-              <div className="w-12 h-px bg-gold mx-auto mt-4" />
+        <FadeSection className="bg-surface/30 border-y border-border/40 py-14 md:py-24">
+          <div className="container mx-auto px-5 md:px-6">
+            <div className="text-center mb-10 md:mb-16 scroll-fade-up">
+              <p className="text-xs tracking-[0.2em] md:tracking-[0.3em] uppercase text-gold font-body mb-2 md:mb-3">Our Promise</p>
+              <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-light">Why Collectors Choose LUNÉVIA</h2>
+              <div className="w-12 h-px bg-gold mx-auto mt-3 md:mt-4" />
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-10">
               {config.features.map(({ title, desc }, i) => {
                 const Icon = FEATURE_ICONS[i] ?? Gem;
                 return (
                   <div key={title} className="scroll-fade-up group" style={{ transitionDelay: `${i * 60}ms` }}>
-                    <div className="border border-border/50 p-8 h-full hover:border-gold/40 transition-colors duration-500 space-y-4">
-                      <div className="w-10 h-10 border border-gold/40 flex items-center justify-center group-hover:bg-gold/10 transition-colors duration-300">
+                    <div className="border border-border/50 p-6 md:p-8 h-full [@media(hover:hover)]:hover:border-gold/40 transition-colors duration-500 space-y-3 md:space-y-4">
+                      <div className="w-10 h-10 border border-gold/40 flex items-center justify-center [@media(hover:hover)]:group-hover:bg-gold/10 transition-colors duration-300">
                         <Icon size={18} className="text-gold" />
                       </div>
-                      <h3 className="font-display text-lg font-light">{title}</h3>
-                      <p className="font-body text-sm text-muted-foreground leading-relaxed">{desc}</p>
+                      <h3 className="font-display text-lg font-light text-foreground">{title}</h3>
+                      <p className="font-body text-sm text-[#B8B8C4] leading-relaxed">{desc}</p>
                     </div>
                   </div>
                 );
@@ -359,24 +366,24 @@ export default function Index() {
 
       {/* ── OUR PROCESS ── */}
       {vis.steps && (
-        <FadeSection className="container mx-auto px-6 py-24">
-          <div className="text-center mb-16 scroll-fade-up">
-            <p className="text-xs tracking-[0.3em] uppercase text-gold font-body mb-3">From Earth to Collection</p>
-            <h2 className="font-display text-3xl md:text-4xl font-light">How We Select Our Specimens</h2>
-            <div className="w-12 h-px bg-gold mx-auto mt-4" />
+        <FadeSection className="container mx-auto px-5 md:px-6 py-14 md:py-24">
+          <div className="text-center mb-10 md:mb-16 scroll-fade-up">
+            <p className="text-xs tracking-[0.2em] md:tracking-[0.3em] uppercase text-gold font-body mb-2 md:mb-3">From Earth to Collection</p>
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-light">How We Select Our Specimens</h2>
+            <div className="w-12 h-px bg-gold mx-auto mt-3 md:mt-4" />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-0">
             {config.steps.map(({ title, body }, i) => (
-              <div key={title} className="scroll-fade-up relative" style={{ transitionDelay: `${i * 100}ms` }}>
+              <div key={title} className="scroll-fade-up relative pl-4 md:pl-0 border-l border-gold/30 md:border-l-0" style={{ transitionDelay: `${i * 100}ms` }}>
                 {i < config.steps.length - 1 && (
                   <div className="hidden lg:block absolute top-10 right-0 w-1/2 h-px border-t border-dashed border-border/50 z-10" style={{ left: "50%" }} />
                 )}
-                <div className="p-8 space-y-4 relative">
-                  <span className="font-display text-5xl font-light text-gold/20 select-none">
+                <div className="p-2 md:p-8 space-y-2 md:space-y-4 relative">
+                  <span className="font-display text-4xl md:text-5xl font-light text-gold/40 select-none block">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <h3 className="font-display text-lg font-light">{title}</h3>
-                  <p className="font-body text-sm text-muted-foreground leading-relaxed">{body}</p>
+                  <h3 className="font-display text-lg font-light text-foreground">{title}</h3>
+                  <p className="font-body text-sm text-[#B8B8C4] leading-relaxed">{body}</p>
                 </div>
               </div>
             ))}
@@ -387,18 +394,20 @@ export default function Index() {
       {/* ── WHATSAPP CTA BANNER ── */}
       {vis.cta && (
         <FadeSection>
-          <div className="relative overflow-hidden py-24">
-            <div className="absolute inset-0 gold-gradient opacity-90" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_40%,_rgba(0,0,0,0.35)_100%)]" />
-            <div className="relative z-10 container mx-auto px-6 text-center space-y-6 scroll-fade-up">
-              <p className="font-body text-xs tracking-[0.4em] uppercase text-primary-foreground/70">Speak Directly With Us</p>
-              <h2 className="font-display text-3xl md:text-5xl font-light text-primary-foreground">{config.cta.heading}</h2>
-              <p className="font-body text-sm text-primary-foreground/80 max-w-lg mx-auto leading-relaxed">{config.cta.subtext}</p>
-              <a href={whatsappHref} target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 px-10 py-4 bg-primary-foreground text-foreground text-sm tracking-[0.2em] uppercase font-body font-medium hover:bg-primary-foreground/90 transition-all duration-300 shadow-lg"
-              >
-                <MessageCircle size={16} /> Chat on WhatsApp
-              </a>
+          <div className="relative overflow-hidden py-14 md:py-24 border-y border-gold/30">
+            <div className="absolute inset-0 bg-gradient-to-r from-[#8C7326] via-[#B59638] to-[#8C7326]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_40%,_rgba(0,0,0,0.4)_100%)]" />
+            <div className="relative z-10 container mx-auto px-5 md:px-6 text-center space-y-5 md:space-y-6 scroll-fade-up">
+              <p className="font-body text-xs md:text-sm tracking-[0.25em] md:tracking-[0.4em] uppercase text-[#0E0E12] font-semibold">Speak Directly With Us</p>
+              <h2 className="font-display text-2xl sm:text-3xl md:text-5xl font-light text-[#0E0E12] leading-tight">{config.cta.heading}</h2>
+              <p className="font-body text-sm md:text-base text-[#1A1A22] max-w-lg mx-auto leading-relaxed">{config.cta.subtext}</p>
+              <div className="pt-2 flex justify-center">
+                <a href={whatsappHref} target="_blank" rel="noopener noreferrer"
+                  className="w-full sm:w-auto max-w-[320px] min-h-[52px] inline-flex items-center justify-center gap-3 px-8 py-3.5 bg-[#0E0E12] text-[#F3E5AB] text-xs md:text-sm tracking-[0.2em] uppercase font-body font-semibold hover:bg-black transition-all duration-300 shadow-xl rounded"
+                >
+                  <MessageCircle size={18} /> Chat on WhatsApp
+                </a>
+              </div>
             </div>
           </div>
         </FadeSection>
@@ -406,13 +415,13 @@ export default function Index() {
 
       {/* ── QUOTE ── */}
       {vis.quote && (
-        <FadeSection className="border-y border-border/40 py-20">
-          <div className="container mx-auto px-6 text-center scroll-fade-up max-w-2xl">
-            <div className="text-gold font-display text-6xl leading-none mb-4 select-none">"</div>
-            <p className="font-display text-xl md:text-2xl font-light italic text-foreground/80 leading-relaxed">
+        <FadeSection className="border-b border-border/40 py-14 md:py-20">
+          <div className="container mx-auto px-5 md:px-6 text-center scroll-fade-up max-w-2xl">
+            <div className="text-gold font-display text-5xl md:text-6xl leading-none mb-3 select-none">“</div>
+            <p className="font-display text-lg sm:text-xl md:text-2xl font-light italic text-foreground/90 leading-relaxed">
               {config.quote.text}
             </p>
-            <p className="font-body text-xs tracking-[0.3em] uppercase text-gold mt-6">{config.quote.attribution}</p>
+            <p className="font-body text-xs tracking-[0.25em] uppercase text-gold mt-5 md:mt-6">{config.quote.attribution}</p>
           </div>
         </FadeSection>
       )}

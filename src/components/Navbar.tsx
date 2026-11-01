@@ -25,8 +25,8 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50 transition-all duration-300">
-      <div className="container mx-auto px-6 h-16 flex items-center justify-between relative">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#121218]/95 backdrop-blur-[12px] border-b border-border/60 transition-all duration-300 pt-[env(safe-area-inset-top)]">
+      <div className="container mx-auto px-5 md:px-6 h-16 flex items-center justify-between relative">
         <Link
           to="/"
           onClick={handleBrandClick}
@@ -53,28 +53,28 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* Mobile Hamburger */}
-        <div className="flex md:hidden items-center gap-2">
+        {/* Mobile Hamburger (44x44px minimum tap target) */}
+        <div className="flex md:hidden items-center">
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="p-2 text-foreground"
+            className="w-11 h-11 flex items-center justify-center text-foreground hover:text-gold transition-colors"
             aria-label="Toggle Menu"
           >
-            {menuOpen ? <X size={20} /> : <Menu size={20} />}
+            {menuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
 
       {/* Mobile Drawer */}
       {menuOpen && (
-        <div className="md:hidden bg-background border-b border-border animate-fade-in">
-          <div className="container mx-auto px-6 py-4 flex flex-col gap-4">
+        <div className="md:hidden bg-[#121218] border-b border-border animate-fade-in">
+          <div className="container mx-auto px-5 py-4 flex flex-col gap-2">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
                 onClick={() => setMenuOpen(false)}
-                className={`text-sm tracking-wide py-1 ${
+                className={`text-sm tracking-wide min-h-[44px] flex items-center ${
                   location.pathname === link.path ? "text-gold font-medium" : "text-muted-foreground"
                 }`}
               >

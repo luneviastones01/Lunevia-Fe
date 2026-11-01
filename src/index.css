@@ -66,51 +66,68 @@
   * {
     @apply border-border;
   }
+  html {
+    scroll-padding-top: 4rem;
+  }
   body {
     @apply bg-background text-foreground font-body antialiased;
+    overflow-x: hidden;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-display;
   }
 
-  /* ── LUXURY BESPOKE SCROLLBAR ── */
-  html {
-    scrollbar-width: thin;
-    scrollbar-color: hsl(45 55% 36% / 0.7) hsl(240 15% 8%);
+  /* ── LUXURY BESPOKE SCROLLBAR (hidden on mobile, visible on desktop) ── */
+  @media (max-width: 768px) {
+    html {
+      scrollbar-width: none;
+    }
+    ::-webkit-scrollbar {
+      display: none;
+      width: 0px;
+      height: 0px;
+    }
   }
 
-  ::-webkit-scrollbar {
-    width: 7px;
-    height: 7px;
-  }
+  @media (min-width: 769px) {
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: hsl(45 55% 36% / 0.7) hsl(240 15% 8%);
+    }
 
-  ::-webkit-scrollbar-track {
-    background: hsl(240 15% 8%);
-    border-left: 1px solid hsl(240 10% 14%);
-  }
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
 
-  ::-webkit-scrollbar-thumb {
-    background: linear-gradient(
-      180deg,
-      hsl(45 50% 32% / 0.8),
-      hsl(45 65% 42% / 0.85)
-    );
-    border-radius: 9999px;
-    border: 1.5px solid transparent;
-    background-clip: padding-box;
-    transition: background 0.3s ease;
-  }
+    ::-webkit-scrollbar-track {
+      background: hsl(240 15% 8%);
+      border-left: 1px solid hsl(240 10% 14%);
+    }
 
-  ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(
-      180deg,
-      hsl(45 72% 47%),
-      hsl(45 72% 58%)
-    );
-  }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(
+        180deg,
+        hsl(45 50% 32% / 0.8),
+        hsl(45 65% 42% / 0.85)
+      );
+      border-radius: 9999px;
+      border: 1.5px solid transparent;
+      background-clip: padding-box;
+      transition: background 0.3s ease;
+    }
 
-  ::-webkit-scrollbar-corner {
-    background: hsl(240 15% 8%);
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(
+        180deg,
+        hsl(45 72% 47%),
+        hsl(45 72% 58%)
+      );
+    }
+
+    ::-webkit-scrollbar-corner {
+      background: hsl(240 15% 8%);
+    }
   }
 }
 

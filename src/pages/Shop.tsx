@@ -67,21 +67,22 @@ export default function Shop() {
           })),
         }}
       />
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-12">
-          <p className="text-xs tracking-[0.3em] uppercase text-gold font-body mb-3">Collection</p>
-          <h1 className="font-display text-3xl md:text-4xl font-light">Our Specimens</h1>
+      <div className="container mx-auto px-5 md:px-6">
+        <div className="text-center mb-8 md:mb-12">
+          <p className="text-xs tracking-[0.2em] md:tracking-[0.3em] uppercase text-gold font-body mb-2 md:mb-3">Collection</p>
+          <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-light">Our Specimens</h1>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
+        {/* Filter Tabs — horizontally scrollable row on mobile with 44px min tap targets */}
+        <div className="flex md:flex-wrap items-center md:justify-center gap-2.5 md:gap-3 mb-8 md:mb-12 overflow-x-auto scrollbar-none pb-2 pt-1 -mx-5 px-5 md:mx-0 md:px-0">
           {visibleCategories.map((cat) => (
             <button
               key={cat}
               onClick={() => handleCategorySelect(cat)}
-              className={`px-4 py-2 text-xs tracking-[0.15em] uppercase font-body border rounded-sm transition-all duration-300 ${
+              className={`min-h-[44px] px-5 py-2.5 text-xs tracking-[0.15em] uppercase font-body border rounded-sm transition-all duration-300 flex-shrink-0 flex items-center justify-center cursor-pointer ${
                 active === cat
-                  ? "border-gold text-gold bg-gold/10"
-                  : "border-border text-muted-foreground hover:border-gold/50 hover:text-foreground"
+                  ? "border-gold text-gold bg-gold/15 font-medium shadow-sm"
+                  : "border-border/80 text-[#B5B5C0] hover:border-gold/50 hover:text-foreground"
               }`}
             >
               {cat}
