@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigationType } from "react-router-dom";
 import { useProducts } from "@/contexts/ProductsContext";
 import ProductCard from "@/components/ProductCard";
+import { ProductCardSkeleton } from "@/components/Skeleton";
 import SEO from "@/components/SEO";
 
 export default function Shop() {
@@ -89,9 +90,10 @@ export default function Shop() {
         </div>
 
         {isLoading && products.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
-            <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin mb-4" />
-            <p className="text-xs uppercase tracking-widest text-gold font-body">Loading Specimens...</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <ProductCardSkeleton key={i} />
+            ))}
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-20 space-y-4">

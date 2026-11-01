@@ -10,6 +10,7 @@ import agate3 from "@/assets/agate-3.webp";
 import { useProducts } from "@/contexts/ProductsContext";
 import { useHomepage } from "@/contexts/HomepageContext";
 import ProductCard from "@/components/ProductCard";
+import { ProductCardSkeleton } from "@/components/Skeleton";
 import { useScrollFadeUp } from "@/hooks/useScrollFadeUp";
 import SEO from "@/components/SEO";
 
@@ -40,8 +41,8 @@ function FadeSection({ children, className = "" }: { children: React.ReactNode; 
 }
 
 export default function Index() {
-  const { products } = useProducts();
-  const { config }   = useHomepage();
+  const { products, isLoading: isProductsLoading } = useProducts();
+  const { config, isLoading: isHomeLoading }   = useHomepage();
   const featured     = products.filter((p) => p.featured);
   const [activeCategory, setActiveCategory] = useState(() => {
     if (typeof window !== "undefined") {
@@ -305,12 +306,14 @@ export default function Index() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filtered.map((p, i) => (
-                <ProductCard key={p.id} product={p} index={i} />
-              ))}
+              {isProductsLoading && products.length === 0
+                ? Array.from({ length: 6 }).map((_, i) => <ProductCardSkeleton key={i} />)
+                : filtered.map((p, i) => (
+                    <ProductCard key={p.id} product={p} index={i} />
+                  ))}
             </div>
 
-            {filtered.length === 0 && (
+            {!isProductsLoading && filtered.length === 0 && (
               <div className="text-center py-24 text-muted-foreground font-body text-sm tracking-wide">
                 No specimens in this category yet.
               </div>

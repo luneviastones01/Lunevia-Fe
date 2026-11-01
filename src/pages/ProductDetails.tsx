@@ -6,6 +6,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import SEO from "@/components/SEO";
 import ProductCard from "@/components/ProductCard";
+import { ProductDetailsSkeleton } from "@/components/Skeleton";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -28,11 +29,7 @@ export default function ProductDetails() {
   const backLabel = isFromHome ? "Back to Home" : "Back to Catalogue";
 
   if (isLoading && !product) {
-    return (
-      <div className="min-h-screen pt-24 flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
+    return <ProductDetailsSkeleton />;
   }
 
   if (!product) {

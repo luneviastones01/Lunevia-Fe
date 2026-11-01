@@ -9,6 +9,7 @@ import { ProductsProvider } from "@/contexts/ProductsContext";
 import { HomepageProvider } from "@/contexts/HomepageContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { PageContentSkeleton } from "@/components/Skeleton";
 import Index from "./pages/Index";
 
 // Lazy-load sub-routes and heavy admin portal to keep initial JS bundle small and fast
@@ -85,7 +86,7 @@ export default function App({ initialData, RouterComponent, routerProps }: AppPr
                 <ScrollToTop />
                 <AdminShortcutListener />
                 <Navbar />
-                <Suspense fallback={<div className="min-h-screen bg-background" />}>
+                <Suspense fallback={<PageContentSkeleton />}>
                   <Routes>
                     {/* Public Showcase & Catalogue */}
                     <Route path="/" element={<Index />} />
