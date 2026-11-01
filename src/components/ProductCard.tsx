@@ -9,8 +9,10 @@ interface Props {
 }
 
 export default function ProductCard({ product, index = 0 }: Props) {
+  const origin = typeof window !== "undefined" ? window.location.origin : "https://www.shoplunévia.com";
+  const productUrl = `${origin}/product/${product.id}`;
   const whatsappUrl = `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(
-    siteConfig.whatsappMessage(product.name)
+    siteConfig.whatsappMessage(product.name, product.id, productUrl)
   )}`;
 
   const currentPath = typeof window !== "undefined" ? window.location.pathname : "/";

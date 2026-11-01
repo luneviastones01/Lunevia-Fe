@@ -3,9 +3,14 @@ export const siteConfig = {
   description: "Nature's Artistry, Refined — Luxury Handcrafted Agate & Gemstone Specimens",
   // Client's verified WhatsApp business concierge number
   whatsappNumber: "919510990215",
-  // Default WhatsApp inquiry message prefix
-  whatsappMessage: (productName: string) =>
-    `Hello Lunevia, I would like to inquire about the specimen "${productName}" from your collection. Could you please share more details?`,
+  // Default WhatsApp inquiry message prefix with optional ref and link
+  whatsappMessage: (productName: string, refId?: string, productUrl?: string) => {
+    let msg = `Hello LUNÉVIA, I am inquiring about the specimen "${productName}"`;
+    if (refId) msg += ` (Ref #${refId.slice(-6).toUpperCase()})`;
+    if (productUrl) msg += `\nLink: ${productUrl}`;
+    msg += `.\nCould you please share availability, price, and high-definition video?`;
+    return msg;
+  },
   // Hidden admin route path
   adminRoute: "/catalog-admin",
 };

@@ -50,8 +50,9 @@ export default function ProductDetails() {
     );
   }
 
+  const productUrl = typeof window !== "undefined" ? window.location.href : "";
   const whatsappUrl = `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(
-    siteConfig.whatsappMessage(product.name)
+    siteConfig.whatsappMessage(product.name, product.id, productUrl)
   )}`;
 
   const handleShare = () => {
