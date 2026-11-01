@@ -1,6 +1,6 @@
 import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
 import { useProducts } from "@/contexts/ProductsContext";
-import { ArrowLeft, MessageCircle, Share2, Sparkles, Check, ShieldCheck, Gem, Globe, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, MessageCircle, Share2, Sparkles, Check, ShieldCheck, Gem, Globe, ChevronLeft, ChevronRight, ZoomIn, X } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -22,6 +22,7 @@ export default function ProductDetails() {
     ? product.images
     : (product?.image ? [product.image] : ["/placeholder.svg"]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isZoomOpen, setIsZoomOpen] = useState(false);
   const currentImage = allImages[activeIndex] || allImages[0];
   const location = useLocation();
   const fromPath = (location.state as any)?.from;
@@ -134,8 +135,10 @@ export default function ProductDetails() {
           {/* Product Image Gallery */}
           <div className="flex flex-col space-y-4">
             <div
-              className="relative overflow-hidden rounded-xl bg-card/60 border border-border/40 shadow-xl flex items-center justify-center opacity-0 animate-fade-in w-full aspect-square group"
+              className="relative overflow-hidden rounded-xl bg-card/60 border border-border/40 shadow-xl flex items-center justify-center opacity-0 animate-fade-in w-full aspect-square group cursor-zoom-in"
               style={{ animationFillMode: "forwards" }}
+              onClick={() => setIsZoomOpen(true)}
+              title="Click to view full-resolution specimen"
             >
               {/* Slides container with smooth sliding transform */}
               <div
@@ -162,12 +165,21 @@ export default function ProductDetails() {
                 ))}
               </div>
 
+              {/* Tap to zoom hint pill */}
+              <div className="absolute top-3 right-3 z-20 pointer-events-none flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-background/80 backdrop-blur-md border border-border/60 text-[11px] text-muted-foreground uppercase tracking-widest font-body opacity-80 group-hover:opacity-100 transition-opacity">
+                <ZoomIn size={13} className="text-gold" />
+                <span>Zoom</span>
+              </div>
+
               {/* Prev / Next Slide Arrows (smooth transition) */}
               {allImages.length > 1 && (
                 <>
                   <button
                     type="button"
-                    onClick={() => setActiveIndex((prev) => (prev > 0 ? prev - 1 : allImages.length - 1))}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveIndex((prev) => (prev > 0 ? prev - 1 : allImages.length - 1));
+                    }}
                     className="absolute left-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-background/80 backdrop-blur-md text-foreground hover:text-gold border border-border/60 opacity-0 group-hover:opacity-100 transition-all cursor-pointer shadow-lg hover:scale-110"
                     aria-label="Previous image"
                   >
@@ -175,7 +187,10 @@ export default function ProductDetails() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setActiveIndex((prev) => (prev < allImages.length - 1 ? prev + 1 : 0))}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveIndex((prev) => (prev < allImages.length - 1 ? prev + 1 : 0));
+                    }}
                     className="absolute right-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-background/80 backdrop-blur-md text-foreground hover:text-gold border border-border/60 opacity-0 group-hover:opacity-100 transition-all cursor-pointer shadow-lg hover:scale-110"
                     aria-label="Next image"
                   >
@@ -305,6 +320,66 @@ export default function ProductDetails() {
           </section>
         )}
       </div>
+
+      {/* Fullscreen High-Resolution Zoom Lightbox */}
+      {isZoomOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex flex-col items-center justify-center p-4 animate-fade-in"
+          onClick={() => setIsZoomOpen(false)}
+        >
+          {/* Top Bar with Close button */}
+          <div className="absolute top-4 right-4 z-50 flex items-center gap-3">
+            <span className="text-xs tracking-widest uppercase text-muted-foreground font-body">
+              {activeIndex + 1} / {allImages.length}
+            </span>
+            <button
+              type="button"
+              onClick={() => setIsZoomOpen(false)}
+              className="w-11 h-11 flex items-center justify-center rounded-full bg-secondary/80 border border-border text-foreground hover:text-gold transition-colors cursor-pointer"
+              aria-label="Close fullscreen view"
+            >
+              <X size={20} />
+            </button>
+          </div>
+
+          {/* Centered High-Definition Specimen Image */}
+          <div
+            className="relative max-w-5xl max-h-[85vh] w-full flex items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={currentImage}
+              alt={`${product.name} Fullscreen Macro View`}
+              className="max-w-full max-h-[82vh] object-contain rounded shadow-2xl select-none"
+            />
+
+            {allImages.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setActiveIndex((prev) => (prev > 0 ? prev - 1 : allImages.length - 1))}
+                  className="absolute left-2 md:-left-12 top-1/2 -translate-y-1/2 p-3 rounded-full bg-secondary/80 border border-border text-foreground hover:text-gold transition-colors cursor-pointer"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft size={22} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveIndex((prev) => (prev < allImages.length - 1 ? prev + 1 : 0))}
+                  className="absolute right-2 md:-right-12 top-1/2 -translate-y-1/2 p-3 rounded-full bg-secondary/80 border border-border text-foreground hover:text-gold transition-colors cursor-pointer"
+                  aria-label="Next image"
+                >
+                  <ChevronRight size={22} />
+                </button>
+              </>
+            )}
+          </div>
+
+          <p className="absolute bottom-4 text-xs text-muted-foreground tracking-wider font-body">
+            Tap anywhere to close • {product.name}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
