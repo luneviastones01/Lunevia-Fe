@@ -3,4 +3,5 @@ Allow: /
 Disallow: /catalog-admin
 Disallow: /admin
 
+Sitemap: https://www.shoplunévia.com/sitemap.xml
 Sitemap: https://www.xn--shoplunvia-h7a.com/sitemap.xml
