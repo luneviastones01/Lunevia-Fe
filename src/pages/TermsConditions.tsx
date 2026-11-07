@@ -96,7 +96,7 @@ export default function TermsConditions() {
             </p>
             <div className="p-4 rounded-lg bg-card/60 border border-border/40 text-sm space-y-1">
               <p><strong className="text-foreground">LUNÉVIA Legal & Client Services</strong></p>
-              <p className="text-muted-foreground">Email: lunevia@gmail.com</p>
+              <p className="text-muted-foreground">Email: luneviastones01@gmail.com</p>
               <p className="text-muted-foreground">Concierge: +91 9510990215</p>
             </div>
           </section>

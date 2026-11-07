@@ -21,7 +21,7 @@ export default function Contact() {
   };
 
   const contactItems = [
-    { icon: Mail, label: "Email", value: "lunevia@gmail.com" },
+    { icon: Mail, label: "Email", value: "luneviastones01@gmail.com" },
     { icon: Phone, label: "Phone", value: "+91 9510990215" },
     { icon: MapPin, label: "Address", value: "Khambhat, Gujarat, India." },
   ];

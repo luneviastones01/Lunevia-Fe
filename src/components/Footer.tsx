@@ -122,6 +122,9 @@ export default function Footer() {
               <Link to="/privacy-policy" className="text-muted-foreground hover:text-gold transition-colors py-2 min-h-[44px] flex items-center">
                 Privacy Policy
               </Link>
+              <Link to="/wholesale" className="text-muted-foreground hover:text-gold transition-colors py-2 min-h-[44px] flex items-center">
+                Wholesale &amp; Bulk Orders
+              </Link>
             </div>
           </div>
 
@@ -145,8 +148,8 @@ export default function Footer() {
             </a>
 
             <div className="pt-1 flex flex-col gap-2.5 text-sm text-[#B8B8C4] font-body">
-              <a href="mailto:lunevia@gmail.com" className="flex items-center gap-2.5 hover:text-gold transition-colors min-h-[44px]">
-                <Mail size={15} className="text-gold" /> lunevia@gmail.com
+              <a href="mailto:luneviastones01@gmail.com" className="flex items-center gap-2.5 hover:text-gold transition-colors min-h-[44px]">
+                <Mail size={15} className="text-gold" /> luneviastones01@gmail.com
               </a>
               <a href="tel:+919510990215" className="flex items-center gap-2.5 hover:text-gold transition-colors min-h-[44px]">
                 <Phone size={15} className="text-gold" /> +91 9510990215
