@@ -196,4 +196,22 @@
     animation-delay: var(--p-delay, 0s);
     will-change: transform, opacity;
   }
+
+  /* Live Continuous Trust Marquee (Does not pause on hover) */
+  @keyframes marqueeLive {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-live-marquee {
+    display: flex;
+    width: max-content;
+    animation: marqueeLive 32s linear infinite !important;
+    will-change: transform;
+    pointer-events: none;
+  }
 }

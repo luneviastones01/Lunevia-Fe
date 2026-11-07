@@ -2,6 +2,34 @@ import { Link } from "react-router-dom";
 import { MessageCircle, Mail, Phone, Gem, ShieldCheck, Globe, Sparkles } from "lucide-react";
 import { siteConfig } from "@/config/site";
 
+const TRUST_ITEMS = [
+  {
+    icon: Gem,
+    title: "100% Natural Stones",
+    desc: "No artificial dyes or heat treatments",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Original Quality",
+    desc: "Every piece is hand-picked and verified",
+  },
+  {
+    icon: Globe,
+    title: "Safe Worldwide Shipping",
+    desc: "Packed carefully and fully insured",
+  },
+  {
+    icon: Sparkles,
+    title: "Ethically Sourced",
+    desc: "Direct partnerships with verified origins",
+  },
+  {
+    icon: MessageCircle,
+    title: "Personal Assistance",
+    desc: "Live WhatsApp support with our team",
+  },
+];
+
 export default function Footer() {
   const whatsappUrl = `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(
     "Hello LUNÉVIA, I want to explore products and place an order."
@@ -9,55 +37,31 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-border/50 bg-background text-foreground">
-      {/* Top Trust Ribbon */}
-      <div className="border-b border-border/40 bg-secondary/20">
-        <div className="container mx-auto px-5 md:px-6 py-6 md:py-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
-            {/* Item 1 */}
-            <div className="flex items-center gap-4 max-w-sm mx-auto md:mx-0 w-full">
-              <div className="w-12 h-12 rounded-full bg-gold/10 border border-gold/25 text-gold flex items-center justify-center shrink-0">
-                <Gem size={20} />
-              </div>
-              <div>
-                <h4 className="text-xs uppercase tracking-[0.15em] font-medium font-body text-foreground">
-                  100% Natural Stones
-                </h4>
-                <p className="text-[13px] md:text-sm text-[#A8A8B5] font-body mt-0.5">
-                  No artificial dyes or heat treatments
-                </p>
-              </div>
-            </div>
+      {/* Top Live Continuous Trust Marquee Strip (Never pauses on hover) */}
+      <div className="border-b border-border/40 bg-secondary/20 py-4 sm:py-5 overflow-hidden relative select-none">
+        {/* Soft edge gradient fades */}
+        <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
-            {/* Item 2 */}
-            <div className="flex items-center gap-4 max-w-sm mx-auto md:mx-0 w-full">
-              <div className="w-12 h-12 rounded-full bg-gold/10 border border-gold/25 text-gold flex items-center justify-center shrink-0">
-                <ShieldCheck size={20} />
+        <div className="animate-live-marquee flex items-center gap-10 sm:gap-16">
+          {[...TRUST_ITEMS, ...TRUST_ITEMS].map((item, idx) => {
+            const Icon = item.icon;
+            return (
+              <div key={idx} className="flex items-center gap-3.5 shrink-0">
+                <div className="w-11 h-11 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center text-gold shrink-0 shadow-xs">
+                  <Icon size={18} />
+                </div>
+                <div className="space-y-0.5">
+                  <h4 className="text-[11px] sm:text-xs font-mono font-semibold tracking-[0.16em] uppercase text-foreground whitespace-nowrap">
+                    {item.title}
+                  </h4>
+                  <p className="text-[11px] sm:text-xs text-[#A8A8B5] font-body leading-tight whitespace-nowrap">
+                    {item.desc}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h4 className="text-xs uppercase tracking-[0.15em] font-medium font-body text-foreground">
-                  Original Quality
-                </h4>
-                <p className="text-[13px] md:text-sm text-[#A8A8B5] font-body mt-0.5">
-                  Every piece is hand-picked and verified
-                </p>
-              </div>
-            </div>
-
-            {/* Item 3 */}
-            <div className="flex items-center gap-4 max-w-sm mx-auto md:mx-0 w-full">
-              <div className="w-12 h-12 rounded-full bg-gold/10 border border-gold/25 text-gold flex items-center justify-center shrink-0">
-                <Globe size={20} />
-              </div>
-              <div>
-                <h4 className="text-xs uppercase tracking-[0.15em] font-medium font-body text-foreground">
-                  Safe Worldwide Shipping
-                </h4>
-                <p className="text-[13px] md:text-sm text-[#A8A8B5] font-body mt-0.5">
-                  Packed carefully and fully insured
-                </p>
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </div>
 
