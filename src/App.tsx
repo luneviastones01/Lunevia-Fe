@@ -7,7 +7,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { ProductsProvider } from "@/contexts/ProductsContext";
 import { HomepageProvider } from "@/contexts/HomepageContext";
+import { CartProvider } from "@/contexts/CartContext";
 import Navbar from "@/components/Navbar";
+import CartDrawer from "@/components/CartDrawer";
 import Footer from "@/components/Footer";
 import { PageContentSkeleton } from "@/components/Skeleton";
 import Index from "./pages/Index";
@@ -80,14 +82,16 @@ export default function App({ initialData, RouterComponent, routerProps }: AppPr
       <ThemeProvider>
         <ProductsProvider initialData={initialData}>
           <HomepageProvider initialConfig={initialData?.homepageConfig}>
-            <TooltipProvider>
-              <Toaster />
-              <Sonner />
-              <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }} {...(routerProps || {})}>
-                <ScrollToTop />
-                <AdminShortcutListener />
-                <Navbar />
-                <Suspense fallback={<PageContentSkeleton />}>
+            <CartProvider>
+              <TooltipProvider>
+                <Toaster />
+                <Sonner />
+                <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }} {...(routerProps || {})}>
+                  <ScrollToTop />
+                  <AdminShortcutListener />
+                  <Navbar />
+                  <CartDrawer />
+                  <Suspense fallback={<PageContentSkeleton />}>
                   <Routes>
                     {/* Public Showcase & Catalogue */}
                     <Route path="/" element={<Index />} />
@@ -110,7 +114,8 @@ export default function App({ initialData, RouterComponent, routerProps }: AppPr
                 <Footer />
               </Router>
             </TooltipProvider>
-          </HomepageProvider>
+          </CartProvider>
+        </HomepageProvider>
         </ProductsProvider>
       </ThemeProvider>
     </QueryClientProvider>

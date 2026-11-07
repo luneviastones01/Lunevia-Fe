@@ -1,6 +1,7 @@
 import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
 import { useProducts } from "@/contexts/ProductsContext";
-import { ArrowLeft, MessageCircle, Share2, Sparkles, Check, ShieldCheck, Gem, Globe, ChevronLeft, ChevronRight, ZoomIn, X } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
+import { ArrowLeft, MessageCircle, Share2, Sparkles, Check, ShieldCheck, Gem, Globe, ChevronLeft, ChevronRight, ZoomIn, X, ShoppingBag } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -12,6 +13,7 @@ export default function ProductDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { products, isLoading } = useProducts();
+  const { addToCart } = useCart();
   const [copied, setCopied] = useState(false);
 
   const product = products.find((p) => p.id === id);
@@ -273,20 +275,31 @@ export default function ProductDetails() {
               </div>
             </div>
 
-            {/* Inquire on WhatsApp */}
+            {/* Actions: Add to Selection & Direct WhatsApp */}
             <div className="pt-2 space-y-3">
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-3 px-8 py-4 bg-[#25D366] hover:bg-[#20ba59] text-white rounded font-body text-sm tracking-[0.15em] uppercase font-medium shadow-lg hover:shadow-xl transition-all duration-300"
-              >
-                <MessageCircle size={20} />
-                Inquire With Our Team
-              </a>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => addToCart(product)}
+                  className="w-full min-h-[50px] flex items-center justify-center gap-2.5 px-6 py-3.5 bg-card border border-gold/40 hover:border-gold hover:bg-gold/10 text-foreground font-body text-xs sm:text-sm tracking-[0.15em] uppercase font-semibold transition-all duration-300 rounded shadow-sm hover:shadow-gold/5 cursor-pointer"
+                >
+                  <ShoppingBag size={18} className="text-gold" />
+                  Add to Selection
+                </button>
+
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full min-h-[50px] flex items-center justify-center gap-2.5 px-6 py-3.5 bg-[#25D366] hover:bg-[#20ba59] text-white rounded font-body text-xs sm:text-sm tracking-[0.15em] uppercase font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  <MessageCircle size={18} />
+                  Inquire With Our Team
+                </a>
+              </div>
 
               <p className="text-xs text-center text-muted-foreground font-body">
-                Direct concierge chat for high-resolution video clips, dimensions & international shipping.
+                Add multiple pieces to your selection to order together, or chat directly for videos &amp; sizing.
               </p>
             </div>
           </div>

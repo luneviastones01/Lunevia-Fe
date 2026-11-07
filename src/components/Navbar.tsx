@@ -1,10 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ShoppingBag } from "lucide-react";
 import { useState } from "react";
+import { useCart } from "@/contexts/CartContext";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
+  const { totalItems, toggleCart } = useCart();
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -54,15 +56,34 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* Mobile Hamburger (44x44px minimum tap target) */}
-        <div className="flex md:hidden items-center">
+        {/* Right Actions: Cart & Mobile Menu */}
+        <div className="flex items-center gap-1">
+          {/* Cart Trigger Button */}
           <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="w-11 h-11 flex items-center justify-center text-foreground hover:text-gold transition-colors"
-            aria-label="Toggle Menu"
+            type="button"
+            onClick={toggleCart}
+            className="relative w-11 h-11 flex items-center justify-center text-foreground hover:text-gold transition-colors rounded-full hover:bg-white/5 cursor-pointer"
+            aria-label={`View selection (${totalItems} items)`}
+            title="View selection"
           >
-            {menuOpen ? <X size={22} /> : <Menu size={22} />}
+            <ShoppingBag size={20} />
+            {totalItems > 0 && (
+              <span className="absolute top-1.5 right-1.5 min-w-[16px] h-4 px-1 rounded-full bg-gold text-black font-mono text-[10px] font-bold flex items-center justify-center shadow-xs">
+                {totalItems > 99 ? "99+" : totalItems}
+              </span>
+            )}
           </button>
+
+          {/* Mobile Hamburger (44x44px minimum tap target) */}
+          <div className="flex md:hidden items-center">
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="w-11 h-11 flex items-center justify-center text-foreground hover:text-gold transition-colors"
+              aria-label="Toggle Menu"
+            >
+              {menuOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
+          </div>
         </div>
       </div>
 

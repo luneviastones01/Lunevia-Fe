@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { Product } from "@/data/products";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, ShoppingBag } from "lucide-react";
 import { siteConfig } from "@/config/site";
+import { useCart } from "@/contexts/CartContext";
 
 interface Props {
   product: Product;
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export default function ProductCard({ product, index = 0 }: Props) {
+  const { addToCart } = useCart();
   const origin = typeof window !== "undefined" ? window.location.origin : "https://www.shoplunévia.com";
   const productUrl = `${origin}/product/${product.id}`;
   const whatsappUrl = `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(
@@ -66,17 +68,33 @@ export default function ProductCard({ product, index = 0 }: Props) {
           </h3>
         </Link>
 
-        <a
-          href={whatsappUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={(e) => e.stopPropagation()}
-          className="w-11 h-11 rounded-full bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366] hover:text-white transition-all duration-300 flex items-center justify-center shrink-0"
-          title={`Inquire on WhatsApp about ${product.name}`}
-          aria-label={`Inquire on WhatsApp about ${product.name}`}
-        >
-          <MessageCircle size={18} />
-        </a>
+        <div className="flex items-center gap-1.5 shrink-0">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              addToCart(product);
+            }}
+            className="w-10 h-10 rounded-full border border-border/70 hover:border-gold text-muted-foreground hover:text-gold bg-card/60 flex items-center justify-center transition-colors cursor-pointer"
+            title={`Add ${product.name} to selection`}
+            aria-label={`Add ${product.name} to selection`}
+          >
+            <ShoppingBag size={17} />
+          </button>
+
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="w-10 h-10 rounded-full bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366] hover:text-white transition-all duration-300 flex items-center justify-center"
+            title={`Inquire on WhatsApp about ${product.name}`}
+            aria-label={`Inquire on WhatsApp about ${product.name}`}
+          >
+            <MessageCircle size={17} />
+          </a>
+        </div>
       </div>
     </div>
   );
