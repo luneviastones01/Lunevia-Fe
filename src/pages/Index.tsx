@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, MessageCircle, Shield, Award, Globe, Gem, Sparkles, CheckCircle } from "lucide-react";
+import { ArrowRight, MessageCircle, Shield, Award, Globe, Gem, Sparkles, CheckCircle, Search, UserCheck, PackageCheck, ShoppingBag, Headset, ShieldCheck } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import heroAgate from "@/assets/hero-agate.webp";
 import heroAbout from "@/assets/hero-about.webp";
@@ -40,6 +40,52 @@ function FadeSection({ children, className = "" }: { children: React.ReactNode; 
   return <div ref={ref} className={className}>{children}</div>;
 }
 
+const ORDER_STEPS = [
+  {
+    step: "01",
+    label: "STEP 01 — EXPLORE OUR COLLECTION",
+    icon: ShoppingBag,
+    title: "Explore Our Collection",
+    desc: "Browse our collection and discover products that match your style and preferences. Choose the product you're interested in purchasing.",
+  },
+  {
+    step: "02",
+    label: "STEP 02 — CONNECT ON WHATSAPP",
+    icon: MessageCircle,
+    title: "Connect on WhatsApp",
+    desc: "Click the WhatsApp Inquiry button on your preferred product to start a direct conversation with our team.",
+  },
+  {
+    step: "03",
+    label: "STEP 03 — PERSONAL ASSISTANCE",
+    icon: Headset,
+    title: "Personal Assistance",
+    desc: "Discuss product details, pricing, availability and any questions directly with a real member of our team. No chatbots or automated conversations.",
+  },
+  {
+    step: "04",
+    label: "STEP 04 — CONFIRM YOUR ORDER",
+    icon: PackageCheck,
+    title: "Confirm Your Order",
+    desc: "Once you're satisfied with the details, confirm your order with our team. We'll guide you through the payment and delivery process.",
+  },
+];
+
+const TRUST_POINTS = [
+  {
+    icon: MessageCircle,
+    title: "Direct WhatsApp Communication",
+  },
+  {
+    icon: Headset,
+    title: "Personalised Customer Assistance",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Dedicated Order Support",
+  },
+];
+
 export default function Index() {
   const { products, isLoading: isProductsLoading } = useProducts();
   const { config, isLoading: isHomeLoading }   = useHomepage();
@@ -71,6 +117,10 @@ export default function Index() {
 
   const whatsappHref = `https://wa.me/${config.whatsappNumber}?text=${encodeURIComponent(
     `Hello Lunevia, I would like to inquire about your collection. Could you please share more details?`
+  )}`;
+
+  const orderWhatsAppHref = `https://wa.me/${config.whatsappNumber}?text=${encodeURIComponent(
+    "Hello Lunévia Team, I'm interested in placing an order. Could you please assist me?"
   )}`;
 
   // Safe visibility flags (default to true if undefined)
@@ -335,6 +385,110 @@ export default function Index() {
         </section>
       )}
 
+      {/* ── HOW TO ORDER SECTION (Below Catalogue) ── */}
+      <FadeSection className="relative overflow-hidden py-16 md:py-24 border-y border-border/40 bg-surface/20 text-foreground">
+          {/* Subtle Ambient Gold Glow */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(197,160,89,0.08)_0%,_transparent_70%)] pointer-events-none" />
+
+          <div className="relative z-10 container mx-auto px-5 md:px-6">
+            {/* 1. Section Heading */}
+            <div className="text-center max-w-2xl mx-auto space-y-3 mb-12 md:mb-16 scroll-fade-up">
+              <h2 className="font-body text-xs md:text-sm tracking-[0.3em] md:tracking-[0.4em] uppercase text-gold font-medium">
+                HOW TO ORDER
+              </h2>
+              <p className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-foreground leading-tight italic">
+                Your Shopping Experience, Made Personal.
+              </p>
+              <div className="w-12 h-px bg-gold mx-auto mt-3 mb-4" />
+              <p className="font-body text-sm md:text-base text-[#B8B8C4] leading-relaxed">
+                Ordering from LUNÉVIA® is simple and personal. Explore our collection, connect with us directly on WhatsApp and let our team assist you every step of the way.
+              </p>
+            </div>
+
+            {/* 2. Four-Step Ordering Process */}
+            <div className="relative max-w-6xl mx-auto mb-14 md:mb-20">
+              {/* Desktop horizontal connecting line */}
+              <div className="hidden lg:block absolute top-12 left-[12%] right-[12%] h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent z-0 pointer-events-none" />
+
+              {/* Mobile vertical timeline line */}
+              <div className="block lg:hidden absolute top-8 bottom-8 left-[23px] w-px bg-gradient-to-b from-gold/40 via-gold/20 to-transparent z-0 pointer-events-none" />
+
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 md:gap-6 relative z-10">
+                {ORDER_STEPS.map(({ step, label, icon: Icon, title, desc }) => (
+                  <div
+                    key={step}
+                    className="relative group bg-card/60 border border-border/50 hover:border-gold/50 rounded-xl p-6 transition-all duration-300 shadow-sm hover:shadow-gold/5 hover:-translate-y-1 pl-16 sm:pl-16 lg:pl-6"
+                  >
+                    {/* Icon & Step Number */}
+                    <div className="absolute left-3 top-6 lg:relative lg:left-auto lg:top-auto lg:flex lg:items-center lg:justify-between mb-4">
+                      <div className="w-11 h-11 rounded-full bg-gold/10 border border-gold/25 text-gold flex items-center justify-center transition-transform group-hover:scale-110 shadow-xs">
+                        <Icon size={19} />
+                      </div>
+                      <span className="hidden lg:block font-mono text-xs font-semibold text-gold/70 tracking-widest">
+                        {step}
+                      </span>
+                    </div>
+
+                    {/* Step Content */}
+                    <div className="space-y-2">
+                      <p className="text-[10px] sm:text-[11px] font-mono tracking-[0.18em] uppercase text-gold font-semibold">
+                        {label}
+                      </p>
+                      <h3 className="font-display text-lg sm:text-xl font-medium text-foreground tracking-wide">
+                        {title}
+                      </h3>
+                      <p className="font-body text-xs sm:text-sm text-[#A0A0B0] leading-relaxed pt-1">
+                        {desc}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 3. Premium Trust-Building Section */}
+            <div className="bg-secondary/30 border border-gold/20 rounded-2xl p-7 sm:p-9 md:p-12 max-w-4xl mx-auto my-10 md:my-14 text-center shadow-xs">
+              <h3 className="font-display text-xl sm:text-2xl md:text-3xl font-light tracking-[0.15em] uppercase text-foreground">
+                REAL PEOPLE. REAL CONVERSATIONS.
+              </h3>
+              <div className="w-10 h-px bg-gold mx-auto mt-3 mb-4" />
+              <p className="font-body text-sm md:text-base text-[#B8B8C4] max-w-2xl mx-auto leading-relaxed mb-8">
+                At LUNÉVIA®, we believe shopping should feel personal. That's why every inquiry connects you directly with our team — no bots, no automated replies, just genuine human assistance.
+              </p>
+
+              {/* 3 Trust Points */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pt-2 border-t border-border/40">
+                {TRUST_POINTS.map(({ icon: Icon, title }) => (
+                  <div key={title} className="flex flex-col items-center text-center space-y-2.5 pt-4">
+                    <div className="w-10 h-10 rounded-full bg-gold/10 border border-gold/25 text-gold flex items-center justify-center shadow-xs">
+                      <Icon size={18} />
+                    </div>
+                    <span className="font-body text-xs sm:text-sm font-semibold tracking-wide text-foreground">
+                      {title}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 4. WhatsApp CTA */}
+            <div className="max-w-md mx-auto text-center space-y-3.5 pt-2">
+              <a
+                href={orderWhatsAppHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full min-h-[54px] inline-flex items-center justify-center gap-3 px-8 py-4 gold-gradient text-primary-foreground rounded font-body text-xs sm:text-sm tracking-[0.18em] uppercase font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:opacity-95 hover:scale-[1.01]"
+              >
+                <MessageCircle size={18} />
+                START YOUR ORDER ON WHATSAPP
+              </a>
+              <p className="text-xs text-muted-foreground font-body leading-relaxed">
+                Have a question or ready to place an order? We're just one message away.
+              </p>
+            </div>
+          </div>
+        </FadeSection>
+
       {/* ── WHY LUNÉVIA ── */}
       {vis.features && (
         <FadeSection className="bg-surface/30 border-y border-border/40 py-14 md:py-24">
@@ -391,23 +545,30 @@ export default function Index() {
         </FadeSection>
       )}
 
-      {/* ── WHATSAPP CTA BANNER ── */}
+      {/* ── WHATSAPP CTA BANNER (Restored Golden Banner) ── */}
       {vis.cta && (
         <FadeSection>
-          <div className="relative overflow-hidden py-14 md:py-24 border-y border-gold/30">
-            <div className="absolute inset-0 bg-gradient-to-r from-[#8C7326] via-[#B59638] to-[#8C7326]" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_40%,_rgba(0,0,0,0.4)_100%)]" />
-            <div className="relative z-10 container mx-auto px-5 md:px-6 text-center space-y-5 md:space-y-6 scroll-fade-up">
-              <p className="font-body text-xs md:text-sm tracking-[0.25em] md:tracking-[0.4em] uppercase text-[#0E0E12] font-semibold">Speak Directly With Us</p>
-              <h2 className="font-display text-2xl sm:text-3xl md:text-5xl font-light text-[#0E0E12] leading-tight">{config.cta.heading}</h2>
-              <p className="font-body text-sm md:text-base text-[#1A1A22] max-w-lg mx-auto leading-relaxed">{config.cta.subtext}</p>
-              <div className="pt-2 flex justify-center">
-                <a href={whatsappHref} target="_blank" rel="noopener noreferrer"
-                  className="w-full sm:w-auto max-w-[320px] min-h-[52px] inline-flex items-center justify-center gap-3 px-8 py-3.5 bg-[#0E0E12] text-[#F3E5AB] text-xs md:text-sm tracking-[0.2em] uppercase font-body font-semibold hover:bg-black transition-all duration-300 shadow-xl rounded"
-                >
-                  <MessageCircle size={18} /> Chat on WhatsApp
-                </a>
-              </div>
+          <div className="relative overflow-hidden py-20 md:py-24">
+            <div className="absolute inset-0 gold-gradient opacity-95" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_40%,_rgba(0,0,0,0.35)_100%)] pointer-events-none" />
+            <div className="relative z-10 container mx-auto px-6 text-center space-y-6 scroll-fade-up max-w-2xl">
+              <p className="font-body text-xs tracking-[0.4em] uppercase text-primary-foreground/75 font-semibold">
+                Speak Directly With Us
+              </p>
+              <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-light text-primary-foreground">
+                {(config.cta?.heading || "Inquire With Our Team").replace(/gemologist/gi, "Team")}
+              </h2>
+              <p className="font-body text-sm sm:text-base text-primary-foreground/85 max-w-lg mx-auto leading-relaxed">
+                {(config.cta?.subtext || "Have a question about a piece? Looking for a specific mineral or size? Our team is available on WhatsApp for personalised guidance — no bots, no scripts.").replace(/gemologist/gi, "team")}
+              </p>
+              <a
+                href={orderWhatsAppHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 px-8 sm:px-10 py-4 bg-[#111111] hover:bg-black text-white text-xs sm:text-sm tracking-[0.2em] uppercase font-body font-semibold transition-all duration-300 shadow-xl hover:scale-[1.02]"
+              >
+                <MessageCircle size={17} /> Chat on WhatsApp
+              </a>
             </div>
           </div>
         </FadeSection>
