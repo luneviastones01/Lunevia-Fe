@@ -407,24 +407,18 @@ export default function Index() {
 
             {/* 2. Four-Step Ordering Process */}
             <div className="relative max-w-6xl mx-auto mb-14 md:mb-20">
-              {/* Desktop horizontal connecting line */}
-              <div className="hidden lg:block absolute top-12 left-[12%] right-[12%] h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent z-0 pointer-events-none" />
-
-              {/* Mobile vertical timeline line */}
-              <div className="block lg:hidden absolute top-8 bottom-8 left-[23px] w-px bg-gradient-to-b from-gold/40 via-gold/20 to-transparent z-0 pointer-events-none" />
-
               <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 md:gap-6 relative z-10">
                 {ORDER_STEPS.map(({ step, label, icon: Icon, title, desc }) => (
                   <div
                     key={step}
-                    className="relative group bg-card/60 border border-border/50 hover:border-gold/50 rounded-xl p-6 transition-all duration-300 shadow-sm hover:shadow-gold/5 hover:-translate-y-1 pl-16 sm:pl-16 lg:pl-6"
+                    className="relative group bg-card border border-border/50 hover:border-gold/50 rounded-xl p-6 transition-all duration-300 shadow-sm hover:shadow-gold/5 hover:-translate-y-1"
                   >
                     {/* Icon & Step Number */}
-                    <div className="absolute left-3 top-6 lg:relative lg:left-auto lg:top-auto lg:flex lg:items-center lg:justify-between mb-4">
+                    <div className="flex items-center justify-between mb-4">
                       <div className="w-11 h-11 rounded-full bg-gold/10 border border-gold/25 text-gold flex items-center justify-center transition-transform group-hover:scale-110 shadow-xs">
                         <Icon size={19} />
                       </div>
-                      <span className="hidden lg:block font-mono text-xs font-semibold text-gold/70 tracking-widest">
+                      <span className="font-mono text-xs font-semibold text-gold/70 tracking-widest">
                         {step}
                       </span>
                     </div>
