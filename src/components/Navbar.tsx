@@ -1,12 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ShoppingBag } from "lucide-react";
+import { Menu, X, ShoppingBag, Sun, Moon } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "@/contexts/CartContext";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const { totalItems, toggleCart } = useCart();
+  const { theme, toggleTheme } = useTheme();
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -28,7 +30,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#121218]/95 backdrop-blur-[12px] border-b border-border/60 transition-all duration-300 pt-[env(safe-area-inset-top)]">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-[12px] border-b border-border/60 transition-colors duration-300 pt-[env(safe-area-inset-top)]">
       <div className="container mx-auto px-5 md:px-6 h-16 flex items-center justify-between relative">
         <Link
           to="/"
@@ -63,13 +65,24 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* Right Actions: Cart & Mobile Menu */}
+        {/* Right Actions: Theme Toggle, Cart & Mobile Menu */}
         <div className="flex items-center gap-1">
+          {/* Theme Toggle Button */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="w-11 h-11 flex items-center justify-center text-foreground hover:text-gold transition-colors rounded-full hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer"
+            aria-label={theme === "dark" ? "Switch to Luxury Warm-Ivory theme" : "Switch to Midnight Obsidian theme"}
+            title={theme === "dark" ? "Switch to Luxury Warm-Ivory theme" : "Switch to Midnight Obsidian theme"}
+          >
+            {theme === "dark" ? <Sun size={19} className="text-gold" /> : <Moon size={19} className="text-foreground" />}
+          </button>
+
           {/* Cart Trigger Button */}
           <button
             type="button"
             onClick={toggleCart}
-            className="relative w-11 h-11 flex items-center justify-center text-foreground hover:text-gold transition-colors rounded-full hover:bg-white/5 cursor-pointer"
+            className="relative w-11 h-11 flex items-center justify-center text-foreground hover:text-gold transition-colors rounded-full hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer"
             aria-label={`View selection (${totalItems} items)`}
             title="View selection"
           >
@@ -96,7 +109,7 @@ export default function Navbar() {
 
       {/* Mobile Drawer */}
       {menuOpen && (
-        <div className="md:hidden bg-[#121218] border-b border-border animate-fade-in">
+        <div className="md:hidden bg-background border-b border-border animate-fade-in">
           <div className="container mx-auto px-5 py-4 flex flex-col gap-2">
             {navLinks.map((link) => (
               <Link

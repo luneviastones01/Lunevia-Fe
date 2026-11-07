@@ -34,7 +34,7 @@ export default function ProductCard({ product, index = 0 }: Props) {
         onClick={handleCardClick}
         className="block"
       >
-        <div className="relative overflow-hidden rounded-md bg-[#16161f] aspect-square border border-border/50">
+        <div className="relative overflow-hidden rounded-md bg-surface/50 dark:bg-[#16161f] aspect-square border border-border/50">
           <img
             src={product.image}
             alt={product.name}

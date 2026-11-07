@@ -60,7 +60,7 @@ export default function CartDrawer() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 28, stiffness: 280 }}
-            className="fixed top-0 right-0 bottom-0 w-full max-w-md bg-[#121218] border-l border-border/60 shadow-2xl z-50 flex flex-col pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]"
+            className="fixed top-0 right-0 bottom-0 w-full max-w-md bg-background border-l border-border/60 shadow-2xl z-50 flex flex-col pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]"
             aria-label="Shopping Cart Drawer"
             role="dialog"
             aria-modal="true"

@@ -9,6 +9,15 @@
     <link rel="dns-prefetch" href="https://lunevia-be.vercel.app" />
     <link rel="icon" type="image/png" href="/logo.png" />
     <link rel="apple-touch-icon" href="/logo.png" />
+    <script>
+      (function() {
+        try {
+          var t = localStorage.getItem('lunevia_theme') || 'dark';
+          document.documentElement.classList.add(t);
+          document.documentElement.classList.remove(t === 'dark' ? 'light' : 'dark');
+        } catch (e) {}
+      })();
+    </script>
     <title>LUNÉVIA — Curated Natural Agate & Gemstone Products</title>
     <meta name="description" content="LUNÉVIA — Discover rare, ethically sourced agate and natural gemstone products.">
     <meta name="author" content="LUNÉVIA" />
@@ -17,7 +26,7 @@
     <meta property="og:description" content="Curated natural agate and gemstone products for homes and collectors.">
   </head>
 
-  <body style="background-color: hsl(240 15% 8%); color: hsl(0 0% 95%); margin: 0;">
+  <body style="margin: 0;">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

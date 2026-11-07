@@ -5,39 +5,40 @@
 @tailwind utilities;
 
 @layer base {
-  /* Default :root is dark luxury to prevent any white reload flash */
+  /* ── 1. LUXURY WARM-IVORY PALETTE (Light Mode) ── */
   :root {
-    --background: 240 15% 8%;
-    --foreground: 0 0% 95%;
-    --card: 240 15% 11%;
-    --card-foreground: 0 0% 95%;
-    --popover: 240 15% 11%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 45 72% 47%;
-    --primary-foreground: 240 10% 4%;
-    --secondary: 240 10% 16%;
-    --secondary-foreground: 0 0% 95%;
-    --muted: 240 10% 16%;
-    --muted-foreground: 240 5% 55%;
-    --accent: 240 10% 16%;
-    --accent-foreground: 0 0% 95%;
-    --destructive: 0 62% 30%;
-    --destructive-foreground: 0 0% 95%;
-    --border: 240 10% 18%;
-    --input: 240 10% 18%;
-    --ring: 45 72% 47%;
+    --background: 37 36% 97%;         /* #FAF8F5 Warm Ivory */
+    --foreground: 240 12% 8%;         /* #121217 Rich Black Typography */
+    --card: 0 0% 100%;                /* Pure Ivory White */
+    --card-foreground: 240 12% 8%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 12% 8%;
+    --primary: 39 49% 56%;            /* #C5A059 Gold Accent */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 38 28% 92%;          /* Warm Stone Tinted Secondary */
+    --secondary-foreground: 240 12% 8%;
+    --muted: 38 22% 93%;
+    --muted-foreground: 38 10% 40%;   /* #65625B Readable Warm Charcoal */
+    --accent: 38 28% 92%;
+    --accent-foreground: 240 12% 8%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 40 28% 87%;             /* #E8E2D6 Warm Stone Border */
+    --input: 40 28% 87%;
+    --ring: 39 49% 56%;
     --radius: 0.25rem;
 
-    --gold: 45 72% 47%;
-    --gold-light: 45 72% 60%;
-    --gold-dark: 45 72% 35%;
-    --surface: 240 15% 12%;
+    --gold: 39 49% 56%;               /* #C5A059 Classic Gold */
+    --gold-light: 42 62% 68%;          /* Light Gold */
+    --gold-dark: 45 57% 35%;           /* #8C7326 Deep Gold */
+    --surface: 38 30% 94%;            /* Soft Warm Stone Surface */
   }
 
+  /* ── 2. MIDNIGHT OBSIDIAN PALETTE (Dark Mode) ── */
   .dark {
-    --background: 240 15% 8%;
-    --foreground: 0 0% 95%;
-    --card: 240 15% 11%;
+    --background: 240 15% 8%;         /* #111116 Dark Obsidian */
+    --foreground: 0 0% 95%;           /* #F2F2F2 */
+    --card: 240 15% 11%;              /* #171720 */
     --card-foreground: 0 0% 95%;
     --popover: 240 15% 11%;
     --popover-foreground: 0 0% 95%;
@@ -51,7 +52,7 @@
     --accent-foreground: 0 0% 95%;
     --destructive: 0 62% 30%;
     --destructive-foreground: 0 0% 95%;
-    --border: 240 10% 18%;
+    --border: 240 10% 18%;            /* Dark Obsidian Border */
     --input: 240 10% 18%;
     --ring: 45 72% 47%;
 
@@ -72,6 +73,17 @@
   body {
     @apply bg-background text-foreground font-body antialiased;
     overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse 85% 50% at 50% -8%, rgba(197, 160, 89, 0.22) 0%, rgba(140, 115, 38, 0.08) 45%, transparent 75%),
+      radial-gradient(ellipse 70% 40% at 50% 100%, rgba(197, 160, 89, 0.12) 0%, transparent 70%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+  }
+
+  .dark body {
+    background-image:
+      radial-gradient(ellipse 80% 45% at 50% -8%, rgba(197, 160, 89, 0.13) 0%, rgba(140, 115, 38, 0.03) 45%, transparent 70%),
+      radial-gradient(ellipse 65% 35% at 50% 100%, rgba(197, 160, 89, 0.07) 0%, transparent 70%);
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-display;

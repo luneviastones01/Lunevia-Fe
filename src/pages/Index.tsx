@@ -230,10 +230,10 @@ export default function Index() {
             <p className="font-body text-xs tracking-[0.5em] uppercase text-gold opacity-0 animate-fade-in" style={{ animationDelay: "100ms" }}>
               {config.hero.eyebrow}
             </p>
-            <h1 className="font-display text-6xl md:text-8xl lg:text-9xl font-light tracking-widest opacity-0 animate-fade-up" style={{ animationDelay: "300ms" }}>
+            <h1 className="font-display text-6xl md:text-8xl lg:text-9xl font-light tracking-widest text-white drop-shadow-md opacity-0 animate-fade-up" style={{ animationDelay: "300ms" }}>
               LUNÉVIA
             </h1>
-            <p className="font-body text-sm md:text-base text-muted-foreground tracking-[0.25em] uppercase opacity-0 animate-fade-up" style={{ animationDelay: "500ms" }}>
+            <p className="font-body text-sm md:text-base text-white/80 tracking-[0.25em] uppercase opacity-0 animate-fade-up" style={{ animationDelay: "500ms" }}>
               {config.hero.tagline}
             </p>
 
@@ -247,7 +247,7 @@ export default function Index() {
                   className={`h-1.5 rounded-full transition-all duration-500 ease-out cursor-pointer ${
                     slideIndex === i
                       ? "w-10 bg-gold shadow-[0_0_10px_rgba(212,175,55,0.8)]"
-                      : "w-2.5 bg-white/30 hover:bg-white/60"
+                      : "w-2.5 bg-white/40 hover:bg-white/70"
                   }`}
                 />
               ))}
@@ -256,7 +256,7 @@ export default function Index() {
             <div className="opacity-0 animate-fade-up flex justify-center items-center" style={{ animationDelay: "700ms" }}>
               <button
                 onClick={scrollToCatalog}
-                className="inline-flex items-center gap-3 px-8 py-3 border border-gold text-gold text-sm tracking-[0.15em] uppercase font-body hover:bg-gold hover:text-primary-foreground transition-all duration-500 cursor-pointer shadow-lg"
+                className="inline-flex items-center gap-3 px-8 py-3 border border-gold text-gold text-sm tracking-[0.15em] uppercase font-body hover:bg-gold hover:text-primary-foreground transition-all duration-500 cursor-pointer shadow-lg backdrop-blur-xs"
               >
                 Explore Collection <ArrowRight size={14} />
               </button>
@@ -266,7 +266,7 @@ export default function Index() {
           {/* Scroll down indicator */}
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-20 opacity-0 animate-fade-in" style={{ animationDelay: "1200ms" }}>
             <div className="w-px h-8 bg-gradient-to-b from-transparent via-gold/60 to-transparent animate-pulse" />
-            <span className="font-body text-[9px] tracking-[0.4em] uppercase text-muted-foreground">Scroll</span>
+            <span className="font-body text-[9px] tracking-[0.4em] uppercase text-white/70">Scroll</span>
           </div>
         </section>
       )}
@@ -315,8 +315,8 @@ export default function Index() {
                 {config.brandStory.heading}<br />
                 <em className="gold-text-gradient">{config.brandStory.headingEm}</em>
               </h2>
-              <p className="font-body text-sm md:text-base text-[#B8B8C4] leading-[1.7] max-w-md">{config.brandStory.body1}</p>
-              <p className="font-body text-sm md:text-base text-[#B8B8C4] leading-[1.7] max-w-md">{config.brandStory.body2}</p>
+              <p className="font-body text-sm md:text-base text-muted-foreground leading-[1.7] max-w-md">{config.brandStory.body1}</p>
+              <p className="font-body text-sm md:text-base text-muted-foreground leading-[1.7] max-w-md">{config.brandStory.body2}</p>
               <Link to="/about" className="inline-flex items-center gap-2 text-xs md:text-sm tracking-[0.15em] uppercase text-gold font-body min-h-[44px] hover:gap-4 transition-all duration-300">
                 Discover Our Philosophy <ArrowRight size={14} />
               </Link>
@@ -387,9 +387,6 @@ export default function Index() {
 
       {/* ── HOW TO ORDER SECTION (Below Catalogue) ── */}
       <FadeSection className="relative overflow-hidden py-16 md:py-24 border-y border-border/40 bg-surface/20 text-foreground">
-          {/* Subtle Ambient Gold Glow */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(197,160,89,0.08)_0%,_transparent_70%)] pointer-events-none" />
-
           <div className="relative z-10 container mx-auto px-5 md:px-6">
             {/* 1. Section Heading */}
             <div className="text-center max-w-2xl mx-auto space-y-3 mb-12 md:mb-16 scroll-fade-up">
@@ -400,7 +397,7 @@ export default function Index() {
                 Your Shopping Experience, Made Personal.
               </p>
               <div className="w-12 h-px bg-gold mx-auto mt-3 mb-4" />
-              <p className="font-body text-sm md:text-base text-[#B8B8C4] leading-relaxed">
+              <p className="font-body text-sm md:text-base text-muted-foreground leading-relaxed">
                 Ordering from LUNÉVIA® is simple and personal. Explore our collection, connect with us directly on WhatsApp and let our team assist you every step of the way.
               </p>
             </div>
@@ -431,7 +428,7 @@ export default function Index() {
                       <h3 className="font-display text-lg sm:text-xl font-medium text-foreground tracking-wide">
                         {title}
                       </h3>
-                      <p className="font-body text-xs sm:text-sm text-[#A0A0B0] leading-relaxed pt-1">
+                      <p className="font-body text-xs sm:text-sm text-muted-foreground leading-relaxed pt-1">
                         {desc}
                       </p>
                     </div>
@@ -446,7 +443,7 @@ export default function Index() {
                 REAL PEOPLE. REAL CONVERSATIONS.
               </h3>
               <div className="w-10 h-px bg-gold mx-auto mt-3 mb-4" />
-              <p className="font-body text-sm md:text-base text-[#B8B8C4] max-w-2xl mx-auto leading-relaxed mb-8">
+              <p className="font-body text-sm md:text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-8">
                 At LUNÉVIA®, we believe shopping should feel personal. That's why every inquiry connects you directly with our team — no bots, no automated replies, just genuine human assistance.
               </p>
 
@@ -502,7 +499,7 @@ export default function Index() {
                         <Icon size={18} className="text-gold" />
                       </div>
                       <h3 className="font-display text-lg font-light text-foreground">{title}</h3>
-                      <p className="font-body text-sm text-[#B8B8C4] leading-relaxed">{desc}</p>
+                      <p className="font-body text-sm text-muted-foreground leading-relaxed">{desc}</p>
                     </div>
                   </div>
                 );
@@ -531,7 +528,7 @@ export default function Index() {
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <h3 className="font-display text-lg font-light text-foreground">{title}</h3>
-                  <p className="font-body text-sm text-[#B8B8C4] leading-relaxed">{body}</p>
+                  <p className="font-body text-sm text-muted-foreground leading-relaxed">{body}</p>
                 </div>
               </div>
             ))}
