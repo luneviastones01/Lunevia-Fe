@@ -70,13 +70,20 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Col 1: Brand */}
           <div className="space-y-3">
-            <div>
-              <h3 className="font-display text-2xl font-medium gold-text-gradient tracking-wide">
-                LUNÉVIA
-              </h3>
-              <p className="text-[11px] tracking-[0.2em] uppercase text-gold font-body mt-0.5">
-                Natural Crystals & Agates
-              </p>
+            <div className="flex items-center gap-3">
+              <img
+                src="/logo.png"
+                alt="LUNÉVIA"
+                className="w-10 h-10 object-contain"
+              />
+              <div>
+                <h3 className="font-display text-2xl font-medium gold-text-gradient tracking-wide leading-none">
+                  LUNÉVIA
+                </h3>
+                <p className="text-[11px] tracking-[0.2em] uppercase text-gold font-body mt-1">
+                  Natural Crystals & Agates
+                </p>
+              </div>
             </div>
             <p className="text-sm text-[#B8B8C4] leading-relaxed font-body">
               Rare, hand-selected natural agate slices, geodes, and healing crystals for homes and collectors.

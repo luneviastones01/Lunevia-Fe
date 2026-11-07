@@ -33,9 +33,16 @@ export default function Navbar() {
         <Link
           to="/"
           onClick={handleBrandClick}
-          className="font-display text-2xl font-semibold tracking-wider gold-text-gradient cursor-pointer"
+          className="flex items-center gap-2.5 cursor-pointer group"
         >
-          LUNÉVIA
+          <img
+            src="/logo.png"
+            alt="LUNÉVIA"
+            className="w-8 h-8 sm:w-9 sm:h-9 object-contain transition-transform duration-300 group-hover:scale-105"
+          />
+          <span className="font-display text-2xl font-semibold tracking-wider gold-text-gradient">
+            LUNÉVIA
+          </span>
         </Link>
 
         {/* Desktop Nav - Centered */}
