@@ -1747,15 +1747,6 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              {/* ── CTA Banner ── */}
-              <div className={`bg-card border border-border rounded-lg p-6 space-y-4 transition-opacity ${hpDraft.visibility?.cta === false ? "opacity-60" : ""}`}>
-                <SectionHeading label="WhatsApp CTA Banner" sectionKey="cta" />
-                <Field label="Heading" value={hpDraft.cta.heading}
-                  onChange={(v) => patch("cta", { ...hpDraft.cta, heading: v })} />
-                <Field label="Subtext" value={hpDraft.cta.subtext} textarea
-                  onChange={(v) => patch("cta", { ...hpDraft.cta, subtext: v })} />
-              </div>
-
               {/* ── Quote ── */}
               <div className={`bg-card border border-border rounded-lg p-6 space-y-4 transition-opacity ${hpDraft.visibility?.quote === false ? "opacity-60" : ""}`}>
                 <SectionHeading label="Editorial Quote Strip" sectionKey="quote" />

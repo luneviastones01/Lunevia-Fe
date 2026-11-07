@@ -46,7 +46,7 @@ const ORDER_STEPS = [
     label: "STEP 01 — EXPLORE OUR COLLECTION",
     icon: ShoppingBag,
     title: "Explore Our Collection",
-    desc: "Browse our collection and discover products that match your style and preferences. Choose the product you're interested in purchasing.",
+    desc:"Browse our collection and discover products that match your style and preferences. Choose the product you're interested in purchasing",
   },
   {
     step: "02",
@@ -535,35 +535,6 @@ export default function Index() {
                 </div>
               </div>
             ))}
-          </div>
-        </FadeSection>
-      )}
-
-      {/* ── WHATSAPP CTA BANNER (Restored Golden Banner) ── */}
-      {vis.cta && (
-        <FadeSection>
-          <div className="relative overflow-hidden py-20 md:py-24">
-            <div className="absolute inset-0 gold-gradient opacity-95" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_40%,_rgba(0,0,0,0.35)_100%)] pointer-events-none" />
-            <div className="relative z-10 container mx-auto px-6 text-center space-y-6 scroll-fade-up max-w-2xl">
-              <p className="font-body text-xs tracking-[0.4em] uppercase text-primary-foreground/75 font-semibold">
-                Speak Directly With Us
-              </p>
-              <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-light text-primary-foreground">
-                {(config.cta?.heading || "Inquire With Our Team").replace(/gemologist/gi, "Team")}
-              </h2>
-              <p className="font-body text-sm sm:text-base text-primary-foreground/85 max-w-lg mx-auto leading-relaxed">
-                {(config.cta?.subtext || "Have a question about a piece? Looking for a specific mineral or size? Our team is available on WhatsApp for personalised guidance — no bots, no scripts.").replace(/gemologist/gi, "team")}
-              </p>
-              <a
-                href={orderWhatsAppHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 px-8 sm:px-10 py-4 bg-[#111111] hover:bg-black text-white text-xs sm:text-sm tracking-[0.2em] uppercase font-body font-semibold transition-all duration-300 shadow-xl hover:scale-[1.02]"
-              >
-                <MessageCircle size={17} /> Chat on WhatsApp
-              </a>
-            </div>
           </div>
         </FadeSection>
       )}
