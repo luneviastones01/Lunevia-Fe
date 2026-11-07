@@ -38,12 +38,12 @@ export default function PrivacyPolicy() {
               1. Information We Collect
             </h2>
             <p>
-              At LUNÉVIA, we hold collector privacy in the highest regard. When you browse our catalogue, contact our gemologist concierge, or place an inquiry via WhatsApp or email, we may collect:
+              At LUNÉVIA, we hold collector privacy in the highest regard. When you browse our catalogue, contact our concierge team, or place an inquiry via WhatsApp or email, we may collect:
             </p>
             <ul className="list-disc pl-5 space-y-1 text-muted-foreground text-sm">
               <li>Name and contact details (email address, phone number).</li>
-              <li>Delivery address and customs clearance details for international specimen transit.</li>
-              <li>Collector inquiries, bespoke specimen requests, and communication history.</li>
+              <li>Delivery address and customs clearance details for international product & order transit.</li>
+              <li>Customer inquiries, bespoke product requests, and communication history.</li>
             </ul>
           </section>
 
@@ -55,7 +55,7 @@ export default function PrivacyPolicy() {
               Your information is exclusively used to provide bespoke collector services, including:
             </p>
             <ul className="list-disc pl-5 space-y-1 text-muted-foreground text-sm">
-              <li>Facilitating direct gemologist consultations and sharing high-definition specimen videos.</li>
+              <li>Facilitating direct consultations with our team and sharing high-definition product videos.</li>
               <li>Coordinating fully insured global logistics and provenance documentation.</li>
               <li>Responding to customer service inquiries and custom curation requests.</li>
             </ul>

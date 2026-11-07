@@ -128,7 +128,7 @@ export function ProductsProvider({
         id: p._id || p.id,
         name: p.name,
         price: p.price || 0,
-        category: typeof p.category === "object" && p.category?.name ? p.category.name : (p.category || "Specimen"),
+        category: typeof p.category === "object" && p.category?.name ? p.category.name : (p.category || "Product"),
         description: p.description || "",
         image: primaryImage,
         images: optimizedImages.length > 0 ? optimizedImages : [primaryImage],
@@ -280,7 +280,7 @@ export function ProductsProvider({
       });
 
       if (res.ok) {
-        toast.success("Specimen added & indexed in MongoDB!");
+        toast.success("Product added & indexed in MongoDB!");
         await fetchProducts();
         await fetchCategories();
         return true;
@@ -327,7 +327,7 @@ export function ProductsProvider({
         });
 
         if (res.ok) {
-          toast.success("Specimen updated in MongoDB!");
+          toast.success("Product updated in MongoDB!");
           await fetchProducts();
           return true;
         } else {
@@ -335,7 +335,7 @@ export function ProductsProvider({
             toast.error("Images combined exceed upload limit (4.5MB). Please upload fewer or smaller images.");
           } else {
             const err = await res.json().catch(() => ({}));
-            toast.error(err.message || "Failed to update specimen in database.");
+            toast.error(err.message || "Failed to update product in database.");
           }
           return false;
         }
@@ -362,7 +362,7 @@ export function ProductsProvider({
         return p;
       })
     );
-    toast.success("Specimen updated");
+    toast.success("Product updated");
     return true;
   };
 
@@ -375,7 +375,7 @@ export function ProductsProvider({
         });
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
-          toast.error(err.message || "Failed to delete specimen");
+          toast.error(err.message || "Failed to delete product");
           return false;
         }
       }

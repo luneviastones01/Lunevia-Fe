@@ -29,8 +29,8 @@ export default function Contact() {
   return (
     <div className="min-h-screen" ref={scrollRef}>
       <SEO
-        title="Contact Our Gemologist Concierge"
-        description="Inquire about custom gemstone curations, specimen sourcing, and worldwide delivery. Connect with the LUNÉVIA showroom in Khambhat, Gujarat."
+        title="Contact Our Team"
+        description="Inquire about custom gemstone curations, product sourcing, and worldwide delivery. Connect with the LUNÉVIA showroom in Khambhat, Gujarat."
         image={heroContact}
       />
       {/* Hero */}
@@ -49,7 +49,7 @@ export default function Contact() {
           {/* Contact Info */}
           <div className="space-y-10">
             <p className="scroll-fade-up text-muted-foreground font-body leading-relaxed">
-              We'd love to hear from you. Whether you have a question about a specimen, need guidance choosing the perfect piece, or simply want to learn more about our collection — our team is here to help.
+              We'd love to hear from you. Whether you have a question about a product, need guidance choosing the perfect piece, or simply want to learn more about our collection — our team is here to help.
             </p>
 
             <div className="space-y-6">

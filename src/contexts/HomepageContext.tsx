@@ -79,18 +79,18 @@ export const DEFAULT_CONFIG: HomepageConfig = {
     quote: true,
   },
   hero: {
-    eyebrow: "Premium Mineral Specimens",
+    eyebrow: "Premium Gemstone Products",
     tagline: "Nature's Artistry, Refined",
     slides: [
       { image: heroAgate,   alt: "Azure Depths & Natural Banding" },
-      { image: heroAbout,   alt: "Handcrafted Mineral Specimen Curation" },
+      { image: heroAbout,   alt: "Handcrafted Mineral & Gemstone Curation" },
       { image: agate1,      alt: "Concentric Blue Agate Slice" },
       { image: heroContact, alt: "Ethically Sourced Geodes & Crystals" },
       { image: agate3,      alt: "Emerald Moss Agate Formations" },
     ],
   },
   stats: [
-    { value: "500+", label: "Specimens Curated" },
+    { value: "500+", label: "Products Curated" },
     { value: "12+",  label: "Countries Sourced" },
     { value: "100%", label: "Natural, Untreated" },
     { value: "5★",   label: "Collector Trust" },
@@ -101,31 +101,31 @@ export const DEFAULT_CONFIG: HomepageConfig = {
     body1:
       "LUNÉVIA was born from a single belief — that the earth's most extraordinary creations deserve to be shared, not hidden in geological archives. Each banded agate, crystalline geode, and fire-lit mineral we carry is the result of millions of years of natural artistry.",
     body2:
-      "Our gemologists travel the world to source specimens directly at origin, ensuring authenticity, ethical provenance, and the kind of quality you simply cannot find on mass-market platforms.",
+      "Our experts travel the world to source gemstones directly at origin, ensuring authenticity, ethical provenance, and the kind of quality you simply cannot find on mass-market platforms.",
     image: heroAbout,
   },
   features: [
-    { title: "Hand Selected",              desc: "Every specimen is personally curated by our in-house gemologists — only the finest 5% makes it to the catalogue." },
+    { title: "Hand Selected",              desc: "Every piece is personally curated by our in-house experts — only the finest 5% makes it to the catalogue." },
     { title: "Ethically Sourced",          desc: "We partner exclusively with responsible mining operations across Brazil, Morocco, and Uruguay." },
     { title: "Certificate of Authenticity", desc: "Each piece ships with a detailed provenance certificate documenting origin, mineral composition and grade." },
-    { title: "Quality Guaranteed",         desc: "Not satisfied? We stand behind every specimen with a no-questions exchange policy." },
+    { title: "Quality Guaranteed",         desc: "Not satisfied? We stand behind every piece with a no-questions exchange policy." },
     { title: "Natural Formation",          desc: "Zero treatments or enhancements — every colour and pattern you see is formed over millions of years." },
-    { title: "Direct Inquiry",             desc: "Skip the middlemen. Speak directly with our gemologist over WhatsApp for personalised guidance." },
+    { title: "Direct Inquiry",             desc: "Skip the middlemen. Speak directly with our team over WhatsApp for personalised guidance." },
   ],
   steps: [
-    { title: "Global Partnerships", body: "We work with trusted mining cooperatives across Brazil, Morocco, Madagascar and Uruguay to source raw specimens at the point of origin." },
-    { title: "Expert Assessment",   body: "Every piece undergoes a rigorous assessment by our in-house gemologists — evaluating colour banding, clarity, size and rarity." },
-    { title: "Lab Documentation",   body: "Accepted specimens are catalogued, measured, photographed in controlled lighting and assigned a unique reference number." },
-    { title: "Ready for You",       body: "The finished specimen is listed in our catalogue and made available for direct inquiry via WhatsApp — no middlemen." },
+    { title: "Global Partnerships", body: "We work with trusted mining cooperatives across Brazil, Morocco, Madagascar and Uruguay to source raw minerals at the point of origin." },
+    { title: "Expert Assessment",   body: "Every piece undergoes a rigorous assessment by our in-house experts — evaluating colour banding, clarity, size and rarity." },
+    { title: "Lab Documentation",   body: "Accepted pieces are catalogued, measured, photographed in controlled lighting and assigned a unique reference number." },
+    { title: "Ready for You",       body: "The finished piece is listed in our catalogue and made available for direct inquiry via WhatsApp — no middlemen." },
   ],
   cta: {
-    heading: "Inquire With Our Gemologist",
+    heading: "Inquire With Our Team",
     subtext:
       "Have a question about a piece? Looking for a specific mineral or size? Our team is available on WhatsApp for personalised guidance — no bots, no scripts.",
   },
   quote: {
     text: "Every agate slice is a window into deep time — a collaboration between water, mineral, and millions of years. LUNÉVIA simply opens the frame.",
-    attribution: "— The LUNÉVIA Gemologists",
+    attribution: "— The LUNÉVIA Team",
   },
   whatsappNumber: "919510990215",
 };

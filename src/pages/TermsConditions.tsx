@@ -38,7 +38,7 @@ export default function TermsConditions() {
               1. Natural Mineral Characteristics
             </h2>
             <p>
-              Every specimen presented by LUNÉVIA is a 100% natural, untreated mineral formation created over millions of years. As each specimen is entirely unique:
+              Every product presented by LUNÉVIA is a 100% natural, untreated mineral formation created over millions of years. As each piece is entirely unique:
             </p>
             <ul className="list-disc pl-5 space-y-1 text-muted-foreground text-sm">
               <li>Natural crystalline inclusions, raw vugs, mineral banding, and surface texturing are inherent hallmarks of authenticity, not flaws.</li>
@@ -51,7 +51,7 @@ export default function TermsConditions() {
               2. Concierge Orders & Availability
             </h2>
             <p>
-              Due to the one-of-a-kind nature of natural gemstone specimens, each piece is subject to prior sale. Orders and reservations are confirmed on a first-come, first-served basis following consultation with our WhatsApp concierge or authorized invoice issuance.
+              Due to the one-of-a-kind nature of natural gemstone products, each piece is subject to prior sale. Orders and reservations are confirmed on a first-come, first-served basis following consultation with our WhatsApp concierge or authorized invoice issuance.
             </p>
           </section>
 
@@ -74,7 +74,7 @@ export default function TermsConditions() {
               4. Authenticity Guarantee & Returns
             </h2>
             <p>
-              LUNÉVIA guarantees the provenance and authenticity of every specimen. In the rare event a piece arrives damaged in transit, notify us within 48 hours of receipt with unboxing photos/video to facilitate immediate claim processing and replacement or credit.
+              LUNÉVIA guarantees the provenance and authenticity of every product. In the rare event a piece arrives damaged in transit, notify us within 48 hours of receipt with unboxing photos/video to facilitate immediate claim processing and replacement or credit.
             </p>
           </section>
 
@@ -83,7 +83,7 @@ export default function TermsConditions() {
               5. Intellectual Property
             </h2>
             <p>
-              All imagery, text descriptions, branding, and specimen archive data featured on this website are the proprietary property of LUNÉVIA and may not be reproduced or distributed without explicit written consent.
+              All imagery, text descriptions, branding, and product archive data featured on this website are the proprietary property of LUNÉVIA and may not be reproduced or distributed without explicit written consent.
             </p>
           </section>
 
@@ -92,7 +92,7 @@ export default function TermsConditions() {
               6. Governing Law & Inquiries
             </h2>
             <p>
-              For inquiries regarding custom curation contracts, specimen certificates, or these terms, contact our concierge directly:
+              For inquiries regarding custom curation contracts, authenticity certificates, or these terms, contact our concierge directly:
             </p>
             <div className="p-4 rounded-lg bg-card/60 border border-border/40 text-sm space-y-1">
               <p><strong className="text-foreground">LUNÉVIA Legal & Client Services</strong></p>

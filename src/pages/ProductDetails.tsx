@@ -36,8 +36,8 @@ export default function ProductDetails() {
   if (!product) {
     return (
       <div className="min-h-screen pt-24 flex flex-col items-center justify-center text-center px-6">
-        <SEO title="Specimen Not Found" noIndex={true} />
-        <h2 className="font-display text-2xl mb-4">Specimen Not Found</h2>
+        <SEO title="Product Not Found" noIndex={true} />
+        <h2 className="font-display text-2xl mb-4">Product Not Found</h2>
         <p className="text-sm text-muted-foreground font-body mb-6">
           The requested piece is no longer available or the link has expired.
         </p>
@@ -77,7 +77,7 @@ export default function ProductDetails() {
         title={`${product.name} — ${product.category}`}
         description={
           product.description ||
-          `Exquisite natural ${product.name} specimen from LUNÉVIA. Ethically sourced and handcrafted agate & mineral gemstone.`
+          `Exquisite natural ${product.name} piece from LUNÉVIA. Ethically sourced and handcrafted agate & mineral gemstone.`
         }
         image={currentImage}
         type="product"
@@ -124,7 +124,7 @@ export default function ProductDetails() {
           <button
             onClick={handleShare}
             className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground hover:text-gold transition-colors py-1 px-3 border border-border rounded"
-            title="Share this specimen"
+            title="Share this product"
           >
             {copied ? <Check size={14} className="text-green-500" /> : <Share2 size={14} />}
             {copied ? "Link Copied" : "Share"}
@@ -138,7 +138,7 @@ export default function ProductDetails() {
               className="relative overflow-hidden rounded-xl bg-card/60 border border-border/40 shadow-xl flex items-center justify-center opacity-0 animate-fade-in w-full aspect-square group cursor-zoom-in"
               style={{ animationFillMode: "forwards" }}
               onClick={() => setIsZoomOpen(true)}
-              title="Click to view full-resolution specimen"
+              title="Click to view full-resolution product photo"
             >
               {/* Slides container with smooth sliding transform */}
               <div
@@ -247,7 +247,7 @@ export default function ProductDetails() {
 
             <div className="p-4 rounded-lg bg-secondary/30 border border-border/40">
               <h3 className="text-xs uppercase tracking-[0.2em] font-body text-gold/90 mb-2 font-medium">
-                Specimen Provenance & Details
+                Product Details &amp; Specifications
               </h3>
               <p className="text-sm text-foreground/80 leading-relaxed font-body">
                 {product.description || "A natural gemstone masterpiece, carefully selected for its distinctive crystalline banding and mineral purity."}
@@ -282,7 +282,7 @@ export default function ProductDetails() {
                 className="w-full flex items-center justify-center gap-3 px-8 py-4 bg-[#25D366] hover:bg-[#20ba59] text-white rounded font-body text-sm tracking-[0.15em] uppercase font-medium shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 <MessageCircle size={20} />
-                Inquire With Gemologist
+                Inquire With Our Team
               </a>
 
               <p className="text-xs text-center text-muted-foreground font-body">
@@ -298,7 +298,7 @@ export default function ProductDetails() {
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
               <div>
                 <p className="text-xs uppercase tracking-[0.25em] text-gold font-body mb-2">
-                  Similar Specimens
+                  Similar Products
                 </p>
                 <h2 className="font-display text-2xl md:text-3xl font-light text-foreground">
                   More in {product.category}
@@ -342,7 +342,7 @@ export default function ProductDetails() {
             </button>
           </div>
 
-          {/* Centered High-Definition Specimen Image */}
+          {/* Centered High-Definition Product Image */}
           <div
             className="relative max-w-5xl max-h-[85vh] w-full flex items-center justify-center"
             onClick={(e) => e.stopPropagation()}

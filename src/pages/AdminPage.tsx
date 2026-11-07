@@ -80,6 +80,39 @@ async function compressImageFile(file: File, maxDim = 1600, quality = 0.82): Pro
   });
 }
 
+function Field({
+  label,
+  value,
+  onChange,
+  textarea = false,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  textarea?: boolean;
+}) {
+  return (
+    <div>
+      <label className="block text-xs uppercase tracking-wider font-body text-muted-foreground mb-1.5">{label}</label>
+      {textarea ? (
+        <textarea
+          rows={3}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full px-3 py-2 bg-background border border-border rounded text-sm focus:outline-none focus:border-gold resize-none font-body"
+        />
+      ) : (
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full px-3 py-2 bg-background border border-border rounded text-sm focus:outline-none focus:border-gold font-body"
+        />
+      )}
+    </div>
+  );
+}
+
 export default function AdminPage() {
   const navigate = useNavigate();
   const {
@@ -173,10 +206,10 @@ export default function AdminPage() {
       if (deleteTarget.type === "product") {
         const ok = await deleteProduct(deleteTarget.product.id);
         if (ok) {
-          toast.success(`Specimen "${deleteTarget.product.name}" deleted`);
+          toast.success(`Product "${deleteTarget.product.name}" deleted`);
           setDeleteTarget(null);
         } else {
-          setDeleteError("Failed to delete specimen.");
+          setDeleteError("Failed to delete product.");
         }
       } else {
         const ok = await deleteCategory(deleteTarget.name);
@@ -383,7 +416,7 @@ export default function AdminPage() {
     const finalCategory = category === "__NEW__" ? customCatInput.trim() : category;
 
     if (!name.trim()) {
-      toast.error("Specimen name is required");
+      toast.error("Product name is required");
       return;
     }
     if (!finalCategory) {
@@ -446,7 +479,7 @@ export default function AdminPage() {
 
     const finalCategory = editCategory === "__NEW__" ? editCustomCat.trim() : editCategory;
     if (!editName.trim()) {
-      toast.error("Specimen name is required");
+      toast.error("Product name is required");
       return;
     }
     if (!finalCategory) {
@@ -589,7 +622,7 @@ export default function AdminPage() {
               <Unlock size={14} /> Private Catalog Management
             </div>
             <h1 className="font-display text-3xl font-light text-foreground">
-              LUNÉVIA Specimen Manager
+              LUNÉVIA Product Manager
             </h1>
           </div>
 
@@ -680,7 +713,7 @@ export default function AdminPage() {
                 <div className="flex items-center gap-2.5">
                   <Pencil size={18} className="text-gold" />
                   <h2 className="font-display text-2xl font-light text-foreground">
-                    Edit Specimen: {editingProduct.name}
+                    Edit Product: {editingProduct.name}
                   </h2>
                 </div>
                 <button
@@ -695,7 +728,7 @@ export default function AdminPage() {
                 {/* Name */}
                 <div>
                   <label className="block text-xs uppercase tracking-wider font-body text-muted-foreground mb-2">
-                    Specimen Name *
+                    Product Name *
                   </label>
                   <input
                     type="text"
@@ -760,7 +793,7 @@ export default function AdminPage() {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <label className="block text-xs uppercase tracking-wider font-body text-muted-foreground">
-                      Specimen Images (Manage & Add More)
+                      Product Images (Manage & Add More)
                     </label>
                     <div className="flex items-center gap-2 text-xs">
                       <button
@@ -784,10 +817,10 @@ export default function AdminPage() {
                     </div>
                   </div>
 
-                  {/* Existing specimen images */}
+                  {/* Existing product images */}
                   {editExistingImages.length > 0 && (
                     <div className="space-y-1.5">
-                      <span className="text-[11px] text-muted-foreground">Existing specimen images:</span>
+                      <span className="text-[11px] text-muted-foreground">Existing product images:</span>
                       <div className="flex flex-wrap gap-2">
                         {editExistingImages.map((img, idx) => (
                           <div key={idx} className="relative w-20 h-20 rounded border border-border overflow-hidden group">
@@ -871,7 +904,7 @@ export default function AdminPage() {
                     className="rounded border-border text-gold focus:ring-gold"
                   />
                   <label htmlFor="edit-featured-toggle" className="text-sm font-body text-foreground cursor-pointer">
-                    Feature this specimen on the Homepage
+                    Feature this product on the Homepage
                   </label>
                 </div>
 
@@ -914,7 +947,7 @@ export default function AdminPage() {
                 <p className="text-xs text-muted-foreground font-body leading-relaxed">
                   {deleteTarget.type === "product" ? (
                     <>
-                      Are you sure you want to permanently remove specimen{" "}
+                      Are you sure you want to permanently remove product{" "}
                       <span className="font-semibold text-foreground">"{deleteTarget.product.name}"</span>{" "}
                       from the catalogue?
                     </>
@@ -995,7 +1028,7 @@ export default function AdminPage() {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="w-20">Preview</TableHead>
-                    <TableHead>Specimen Name</TableHead>
+                    <TableHead>Product Name</TableHead>
                     <TableHead>Category</TableHead>
                     <TableHead>Featured</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
@@ -1007,7 +1040,7 @@ export default function AdminPage() {
                       <TableCell colSpan={5} className="text-center py-12 text-muted-foreground font-body">
                         <div className="flex items-center justify-center gap-2 text-gold">
                           <RefreshCw size={16} className="animate-spin" />
-                          <span className="text-xs uppercase tracking-wider">Loading specimens...</span>
+                          <span className="text-xs uppercase tracking-wider">Loading products...</span>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -1080,14 +1113,14 @@ export default function AdminPage() {
         {activeTab === "add" && (
           <div className="max-w-2xl mx-auto bg-card border border-border rounded-lg p-8 shadow-xl">
             <h2 className="font-display text-2xl font-light mb-6 text-foreground">
-              Add New Specimen to Catalogue
+              Add New Product to Catalogue
             </h2>
 
             <form onSubmit={handleAddProduct} className="space-y-6">
               {/* Product Name */}
               <div>
                 <label className="block text-xs uppercase tracking-wider font-body text-muted-foreground mb-2">
-                  Specimen Name *
+                  Product Name *
                 </label>
                 <input
                   type="text"
@@ -1155,7 +1188,7 @@ export default function AdminPage() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <label className="block text-xs uppercase tracking-wider font-body text-muted-foreground">
-                    Specimen Images (Select multiple images)
+                    Product Images (Select multiple images)
                   </label>
                   <div className="flex items-center gap-2 text-xs">
                     <button
@@ -1255,7 +1288,7 @@ export default function AdminPage() {
                   className="rounded border-border text-gold focus:ring-gold"
                 />
                 <label htmlFor="featured-toggle" className="text-sm font-body text-foreground cursor-pointer">
-                  Feature this specimen on the Homepage
+                  Feature this product on the Homepage
                 </label>
               </div>
 
@@ -1398,29 +1431,6 @@ export default function AdminPage() {
             );
           };
 
-          const Field = ({ label, value, onChange, textarea = false }: {
-            label: string; value: string; onChange: (v: string) => void; textarea?: boolean;
-          }) => (
-            <div>
-              <label className="block text-xs uppercase tracking-wider font-body text-muted-foreground mb-1.5">{label}</label>
-              {textarea ? (
-                <textarea
-                  rows={3}
-                  value={value}
-                  onChange={(e) => onChange(e.target.value)}
-                  className="w-full px-3 py-2 bg-background border border-border rounded text-sm focus:outline-none focus:border-gold resize-none font-body"
-                />
-              ) : (
-                <input
-                  type="text"
-                  value={value}
-                  onChange={(e) => onChange(e.target.value)}
-                  className="w-full px-3 py-2 bg-background border border-border rounded text-sm focus:outline-none focus:border-gold font-body"
-                />
-              )}
-            </div>
-          );
-
           return (
             <div className="space-y-8 max-w-4xl mx-auto">
 
@@ -1480,7 +1490,7 @@ export default function AdminPage() {
                         const currentSlides = hpDraft.hero.slides || [];
                         const nextSlides = [
                           ...currentSlides,
-                          { image: "/placeholder.svg", alt: `Specimen Slide ${currentSlides.length + 1}` },
+                          { image: "/placeholder.svg", alt: `Product Slide ${currentSlides.length + 1}` },
                         ];
                         patch("hero", { ...hpDraft.hero, slides: nextSlides });
                         toast.info("New slide added — set image and click 'Save & Go Live'");
@@ -1559,7 +1569,7 @@ export default function AdminPage() {
                               nextSlides[sIdx] = { ...slide, alt: e.target.value };
                               patch("hero", { ...hpDraft.hero, slides: nextSlides });
                             }}
-                            placeholder="Alt / Specimen description (optional)"
+                            placeholder="Alt / Product description (optional)"
                             className="w-full px-3 py-1 bg-background border border-border/60 rounded text-[11px] font-body focus:outline-none text-muted-foreground focus:text-foreground"
                           />
                         </div>
@@ -1610,7 +1620,7 @@ export default function AdminPage() {
 
               {/* ── Featured Showcase ── */}
               <div className={`bg-card border border-border rounded-lg p-6 space-y-3 transition-opacity ${hpDraft.visibility?.featured === false ? "opacity-60" : ""}`}>
-                <SectionHeading label="Featured Specimens Grid" sectionKey="featured" />
+                <SectionHeading label="Featured Products Grid" sectionKey="featured" />
                 <p className="text-xs text-muted-foreground font-body">
                   Displays items flagged as "Feature on Homepage" in the Products tab. Use the toggle above to hide or show this entire section.
                 </p>
@@ -1685,7 +1695,7 @@ export default function AdminPage() {
               <div className={`bg-card border border-border rounded-lg p-6 space-y-3 transition-opacity ${hpDraft.visibility?.catalog === false ? "opacity-60" : ""}`}>
                 <SectionHeading label="Full Catalogue & Filter Section" sectionKey="catalog" />
                 <p className="text-xs text-muted-foreground font-body">
-                  Displays the category filter tabs and all catalogue specimen cards directly on the homepage. Use the toggle above to hide or show this section.
+                  Displays the category filter tabs and all catalogue product cards directly on the homepage. Use the toggle above to hide or show this section.
                 </p>
               </div>
 

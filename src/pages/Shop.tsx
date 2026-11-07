@@ -44,20 +44,20 @@ export default function Shop() {
     }
   }, []);
 
-  // Filter categories to only those with active specimens (or "All") so users never see an empty category by accident
+  // Filter categories to only those with active products (or "All") so users never see an empty category by accident
   const visibleCategories = ["All", ...categories.filter((cat) => cat !== "All" && products.some((p) => p.category === cat))];
   const filtered = active === "All" ? products : products.filter((p) => p.category === active);
 
   return (
     <div className="min-h-screen pt-24 pb-16">
       <SEO
-        title="Curated Specimen Catalogue"
-        description="Browse LUNÉVIA's curated collection of natural agate slices, amethyst geodes, and rare mineral specimens. Handpicked for collectors and luxury interiors."
+        title="Curated Product Catalogue"
+        description="Browse LUNÉVIA's curated collection of natural agate slices, amethyst geodes, and rare gemstone products. Handpicked for collectors and luxury interiors."
         schema={{
           "@context": "https://schema.org",
           "@type": "CollectionPage",
-          name: "LUNÉVIA Specimen Catalogue",
-          description: "Curated collection of natural agate and mineral specimens.",
+          name: "LUNÉVIA Product Catalogue",
+          description: "Curated collection of natural agate and gemstone products.",
           hasPart: products.map((p) => ({
             "@type": "Product",
             name: p.name,
@@ -70,7 +70,7 @@ export default function Shop() {
       <div className="container mx-auto px-5 md:px-6">
         <div className="text-center mb-8 md:mb-12">
           <p className="text-xs tracking-[0.2em] md:tracking-[0.3em] uppercase text-gold font-body mb-2 md:mb-3">Collection</p>
-          <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-light">Our Specimens</h1>
+          <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-light">Our Products</h1>
         </div>
 
         {/* Filter Tabs — horizontally scrollable row on mobile with 44px min tap targets */}
@@ -104,7 +104,7 @@ export default function Shop() {
                 onClick={() => handleCategorySelect("All")}
                 className="px-5 py-2 border border-gold text-gold text-xs uppercase tracking-[0.15em] font-body hover:bg-gold/10 transition-colors"
               >
-                View All Specimens
+                View All Products
               </button>
             )}
           </div>

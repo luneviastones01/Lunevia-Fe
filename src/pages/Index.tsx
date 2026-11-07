@@ -86,12 +86,12 @@ export default function Index() {
     quote:      config.visibility?.quote !== false,
   };
 
-  // Hero slideshow items (configured by admin or default luxury specimens)
+  // Hero slideshow items (configured by admin or default luxury photos)
   const slides = config.hero?.slides && config.hero.slides.length > 0
     ? config.hero.slides
     : [
         { image: heroAgate,   alt: "Azure Depths & Natural Banding" },
-        { image: heroAbout,   alt: "Handcrafted Mineral Specimen Curation" },
+        { image: heroAbout,   alt: "Handcrafted Mineral & Gemstone Curation" },
         { image: agate1,      alt: "Concentric Blue Agate Slice" },
         { image: heroContact, alt: "Ethically Sourced Geodes & Crystals" },
         { image: agate3,      alt: "Emerald Moss Agate Formations" },
@@ -108,13 +108,13 @@ export default function Index() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Curated Natural Agate & Mineral Specimens"
-        description="Discover rare, ethically sourced agate and natural mineral specimens. Handcrafted slices, amethyst geodes, and bespoke luxury crystal centrepieces."
+        title="Curated Natural Agate & Gemstone Products"
+        description="Discover rare, ethically sourced agate and natural gemstone products. Handcrafted slices, amethyst geodes, and bespoke luxury crystal centrepieces."
         schema={{
           "@context": "https://schema.org",
           "@type": "JewelryStore",
           name: "LUNÉVIA",
-          description: "Curated Natural Agate & Mineral Specimens for collectors and luxury interiors.",
+          description: "Curated Natural Agate & Gemstone Products for collectors and luxury interiors.",
           currenciesAccepted: "USD, INR",
           paymentAccepted: "Direct Inquiry",
           priceRange: "$$$",
@@ -244,7 +244,7 @@ export default function Index() {
         <FadeSection className="container mx-auto px-5 md:px-6 py-14 md:py-24">
           <div className="text-center mb-10 md:mb-16 scroll-fade-up">
             <p className="text-xs tracking-[0.2em] md:tracking-[0.3em] uppercase text-gold font-body mb-2 md:mb-3">Curated Selection</p>
-            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-light">Featured Specimens</h2>
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-light">Featured Products</h2>
             <div className="w-12 h-px bg-gold mx-auto mt-3 md:mt-4" />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -274,7 +274,7 @@ export default function Index() {
             <div className="relative scroll-fade-up" style={{ transitionDelay: "150ms" }}>
               <img
                 src={config.brandStory?.image || heroAbout}
-                alt="Gemologist selecting specimens"
+                alt="Selecting gemstones"
                 width={800}
                 height={600}
                 className="w-full aspect-[4/3] md:aspect-auto md:h-[480px] object-cover"
@@ -322,7 +322,7 @@ export default function Index() {
 
             {!isProductsLoading && filtered.length === 0 && (
               <div className="text-center py-24 text-muted-foreground font-body text-sm tracking-wide">
-                No specimens in this category yet.
+                No products in this category yet.
               </div>
             )}
 
@@ -369,7 +369,7 @@ export default function Index() {
         <FadeSection className="container mx-auto px-5 md:px-6 py-14 md:py-24">
           <div className="text-center mb-10 md:mb-16 scroll-fade-up">
             <p className="text-xs tracking-[0.2em] md:tracking-[0.3em] uppercase text-gold font-body mb-2 md:mb-3">From Earth to Collection</p>
-            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-light">How We Select Our Specimens</h2>
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-light">How We Select Our Products</h2>
             <div className="w-12 h-px bg-gold mx-auto mt-3 md:mt-4" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-0">

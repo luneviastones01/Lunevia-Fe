@@ -24,7 +24,7 @@ export default function SEO({
     // 1. Title
     const fullTitle = title
       ? `${title} | ${siteConfig.name}`
-      : `${siteConfig.name} — Curated Natural Agate & Mineral Specimens`;
+      : `${siteConfig.name} — Curated Natural Agate & Gemstone Products`;
     document.title = fullTitle;
 
     // Helper to set or create meta tags

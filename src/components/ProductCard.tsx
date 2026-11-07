@@ -45,7 +45,7 @@ export default function ProductCard({ product, index = 0 }: Props) {
           {/* Hover overlay visible only on desktop devices with hover support */}
           <div className="hidden md:flex absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 items-end p-4">
             <span className="text-xs uppercase tracking-widest text-gold font-body font-medium">
-              View Specimen Details &rarr;
+              View Product Details &rarr;
             </span>
           </div>
         </div>

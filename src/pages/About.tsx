@@ -30,7 +30,7 @@ export default function About() {
             LUNÉVIA was born from a deep reverence for the Earth's hidden masterpieces. We believe that every agate holds within it millions of years of geological artistry — layers of color, light, and form that rival the finest works of human creativity.
           </p>
           <p className="text-muted-foreground font-body leading-relaxed text-center">
-            Our founders, driven by a passion for natural beauty and ethical sourcing, set out to curate a collection of the world's most extraordinary agate specimens. Each piece in the LUNÉVIA collection is hand-selected by our team of expert gemologists for its unique character, vivid color, and exceptional quality.
+            Our founders, driven by a passion for natural beauty and ethical sourcing, set out to curate a collection of the world's most extraordinary agate & gemstone products. Each piece in the LUNÉVIA collection is hand-selected by our team of gemstone experts for its unique character, vivid color, and exceptional quality.
           </p>
         </div>
 
@@ -39,7 +39,7 @@ export default function About() {
             {
               icon: Gem,
               title: "Expert Curation",
-              description: "Our gemologists travel the globe to source the rarest and most beautiful agate specimens, ensuring every piece meets our exacting standards.",
+              description: "Our experts travel the globe to source the rarest and most beautiful agate creations, ensuring every piece meets our exacting standards.",
             },
             {
               icon: Globe,
@@ -49,7 +49,7 @@ export default function About() {
             {
               icon: Award,
               title: "Certified Authenticity",
-              description: "Every LUNÉVIA specimen comes with a certificate of authenticity detailing its origin, composition, and unique geological characteristics.",
+              description: "Every LUNÉVIA piece comes with a certificate of authenticity detailing its origin, composition, and unique geological characteristics.",
             },
           ].map((item, i) => (
             <div key={item.title} className="scroll-fade-up text-center border border-border rounded-sm p-8 bg-card hover:border-gold/30 transition-colors duration-500" style={{ transitionDelay: `${i * 120}ms` }}>
