@@ -126,7 +126,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const getWhatsAppOrderUrl = useCallback(() => {
-    const origin = typeof window !== "undefined" ? window.location.origin : "https://www.shoplunévia.com";
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://www.xn--shoplunvia-h7a.com";
     const message = buildMultiProductWhatsAppMessage(items, origin);
     return `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(message)}`;
   }, [items]);
