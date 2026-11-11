@@ -97,7 +97,15 @@ export function ProductsProvider({
     }
     return [];
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const cached = localStorage.getItem("lunevia_cached_products");
+        if (cached && JSON.parse(cached)?.length > 0) return false;
+      } catch {}
+    }
+    return true;
+  });
 
   // Helper to get admin passcode & 7-day session header
   const getAdminHeaders = (passcode?: string) => {
@@ -146,10 +154,12 @@ export function ProductsProvider({
       });
       if (res.ok) {
         const data = await res.json();
+        let hasProducts = false;
         // 1. Process products
         if (Array.isArray(data.products) && data.products.length > 0) {
           const mapped = mapApiProducts(data.products);
           setProducts(mapped);
+          hasProducts = true;
           try {
             localStorage.setItem("lunevia_cached_products", JSON.stringify(mapped));
           } catch {}
@@ -170,7 +180,7 @@ export function ProductsProvider({
             new CustomEvent("lunevia_bootstrap_homepage", { detail: data.homepageConfig })
           );
         }
-        return true;
+        return hasProducts;
       }
     } catch {
       // Backend offline or fallback to individual calls
@@ -233,13 +243,21 @@ export function ProductsProvider({
   }, []);
 
   useEffect(() => {
+    let retryTimer: any;
     // Attempt single bootstrap first; fall back to individual if bootstrap fails
     fetchBootstrap().then((success) => {
       if (!success) {
         fetchProducts();
         fetchCategories();
+        // Serverless cold-start retry: if still empty, retry once after 1.5s
+        retryTimer = setTimeout(() => {
+          fetchBootstrap();
+        }, 1500);
       }
     });
+    return () => {
+      if (retryTimer) clearTimeout(retryTimer);
+    };
   }, [fetchBootstrap, fetchProducts, fetchCategories]);
 
   const categories = [
