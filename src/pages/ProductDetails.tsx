@@ -53,9 +53,8 @@ export default function ProductDetails() {
     );
   }
 
-  const productUrl = typeof window !== "undefined" ? window.location.href : "";
   const whatsappUrl = `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(
-    siteConfig.whatsappMessage(product.name, product.id, productUrl)
+    siteConfig.whatsappMessage(product.name)
   )}`;
 
   const handleShare = () => {
@@ -149,19 +148,11 @@ export default function ProductDetails() {
               >
                 {allImages.map((img, idx) => (
                   <div key={idx} className="w-full h-full flex-shrink-0 flex items-center justify-center relative overflow-hidden bg-black/40">
-                    {/* Ambient blurred backdrop glow */}
-                    <img
-                      src={img}
-                      alt=""
-                      aria-hidden="true"
-                      decoding="async"
-                      className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-30 scale-125 pointer-events-none"
-                    />
                     <img
                       src={img}
                       alt={`${product.name} - View ${idx + 1}`}
                       decoding="async"
-                      className="relative z-10 w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
                 ))}

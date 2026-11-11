@@ -11,10 +11,8 @@ interface Props {
 
 export default function ProductCard({ product, index = 0 }: Props) {
   const { addToCart } = useCart();
-  const origin = typeof window !== "undefined" ? window.location.origin : "https://www.xn--shoplunvia-h7a.com";
-  const productUrl = `${origin}/product/${product.id}`;
   const whatsappUrl = `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(
-    siteConfig.whatsappMessage(product.name, product.id, productUrl)
+    siteConfig.whatsappMessage(product.name)
   )}`;
 
   const currentPath = typeof window !== "undefined" ? window.location.pathname : "/";

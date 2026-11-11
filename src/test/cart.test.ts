@@ -20,13 +20,13 @@ describe("Cart WhatsApp Message Builder", () => {
       },
     ];
 
-    const message = buildMultiProductWhatsAppMessage(mockItems, "https://www.shoplunévia.com");
+    const message = buildMultiProductWhatsAppMessage(mockItems);
 
     expect(message).toContain("Hello Lunévia Team");
-    expect(message).toContain("1. Blue Lace Agate Slice (Ref #_AGATE) — Qty: 2");
-    expect(message).toContain("Link: https://www.shoplunévia.com/product/prod_001_agate");
-    expect(message).toContain("2. Deep Violet Amethyst Cluster (Ref #ETHYST) — Qty: 1");
-    expect(message).toContain("Link: https://www.shoplunévia.com/product/prod_002_amethyst");
+    expect(message).toContain("1. Blue Lace Agate Slice — Qty: 2");
+    expect(message).toContain("2. Deep Violet Amethyst Cluster — Qty: 1");
+    expect(message).not.toContain("http");
+    expect(message).not.toContain("Link:");
     expect(message).toContain("Total Items: 3 products");
   });
 });

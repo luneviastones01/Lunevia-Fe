@@ -30,17 +30,15 @@ const CART_STORAGE_KEY = "lunevia_cart";
 
 const CartContext = createContext<CartContextType | null>(null);
 
-export function buildMultiProductWhatsAppMessage(items: CartItem[], origin: string): string {
+export function buildMultiProductWhatsAppMessage(items: CartItem[]): string {
   let msg = `Hello Lunévia Team,\n\nI would like to place an order / inquire about the following items in my selection:\n\n`;
 
   items.forEach((item, index) => {
-    const ref = item.id ? ` (Ref #${item.id.slice(-6).toUpperCase()})` : "";
-    const url = `${origin}/product/${item.id}`;
-    msg += `${index + 1}. ${item.name}${ref} — Qty: ${item.quantity}\n   Link: ${url}\n\n`;
+    msg += `${index + 1}. ${item.name} — Qty: ${item.quantity}\n`;
   });
 
   const totalQty = items.reduce((sum, i) => sum + i.quantity, 0);
-  msg += `Total Items: ${totalQty} product${totalQty > 1 ? "s" : ""}\n\n`;
+  msg += `\nTotal Items: ${totalQty} product${totalQty > 1 ? "s" : ""}\n\n`;
   msg += `Could you please confirm product availability, provide pricing, and share high-definition videos?\n\nThank you!`;
 
   return msg;
@@ -126,8 +124,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const getWhatsAppOrderUrl = useCallback(() => {
-    const origin = typeof window !== "undefined" ? window.location.origin : "https://www.xn--shoplunvia-h7a.com";
-    const message = buildMultiProductWhatsAppMessage(items, origin);
+    const message = buildMultiProductWhatsAppMessage(items);
     return `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(message)}`;
   }, [items]);
 

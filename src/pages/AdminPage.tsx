@@ -41,34 +41,33 @@ const API_BASE = import.meta.env.VITE_API_URL
     ? "http://localhost:5000/api"
     : "/api");
 
-// In-browser image compressor: scales high-res photos to max 1600px & ~300KB
-// Prevents multiple photos from ever exceeding Vercel's 4.5MB serverless payload limit
-async function compressImageFile(file: File, maxDim = 1600, quality = 0.82): Promise<File> {
-  if (!file.type.startsWith("image/") || file.size < 400 * 1024) return file;
+// In-browser image compressor: enforces 1:1 (Square) aspect ratio and compresses to max 1200px
+async function compressImageFile(file: File, maxDim = 1200, quality = 0.85): Promise<File> {
+  if (!file.type.startsWith("image/")) return file;
   return new Promise((resolve) => {
     const img = new Image();
     const objectUrl = URL.createObjectURL(file);
     img.onload = () => {
       URL.revokeObjectURL(objectUrl);
-      let { width, height } = img;
-      if (width > maxDim || height > maxDim) {
-        if (width > height) {
-          height = Math.round((height * maxDim) / width);
-          width = maxDim;
-        } else {
-          width = Math.round((width * maxDim) / height);
-          height = maxDim;
-        }
-      }
+      const { width, height } = img;
+      const minSide = Math.min(width, height);
+      const targetSize = Math.min(minSide, maxDim);
+      const sx = Math.round((width - minSide) / 2);
+      const sy = Math.round((height - minSide) / 2);
+
       const canvas = document.createElement("canvas");
-      canvas.width = width;
-      canvas.height = height;
+      canvas.width = targetSize;
+      canvas.height = targetSize;
       const ctx = canvas.getContext("2d");
       if (!ctx) return resolve(file);
-      ctx.drawImage(img, 0, 0, width, height);
+
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, targetSize, targetSize);
+
       canvas.toBlob(
         (blob) => {
-          if (!blob || blob.size >= file.size) return resolve(file);
+          if (!blob) return resolve(file);
           resolve(new File([blob], file.name.replace(/\.[^/.]+$/, ".jpg"), { type: "image/jpeg" }));
         },
         "image/jpeg",
@@ -858,7 +857,7 @@ export default function AdminPage() {
                       <label htmlFor="edit-file-input" className="cursor-pointer text-xs text-foreground font-body flex flex-col items-center gap-1.5">
                         <Upload size={18} className="text-muted-foreground" />
                         <span>Click to select one or multiple new images</span>
-                        <span className="text-[10px] text-muted-foreground">JPG, PNG, WebP up to 15MB each</span>
+                        <span className="text-[10px] text-gold font-medium font-mono">Aspect Ratio: 1:1 (Square)</span>
                       </label>
                     </div>
                   ) : (
@@ -1228,8 +1227,8 @@ export default function AdminPage() {
                         <span className="text-xs text-foreground font-body">
                           Click to select one or multiple images from your computer
                         </span>
-                        <span className="text-[11px] text-muted-foreground">
-                          JPG, PNG, WebP up to 15MB each (you can select multiple files at once)
+                        <span className="text-[11px] text-gold font-medium font-mono">
+                          Image Specification: Aspect Ratio: 1:1 (Square)
                         </span>
                       </label>
                     </div>
