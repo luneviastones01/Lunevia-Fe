@@ -39,7 +39,7 @@ const API_BASE = import.meta.env.VITE_API_URL
   ? import.meta.env.VITE_API_URL.replace(/\/+$/, "")
   : (typeof window !== "undefined" && window.location.origin.includes("localhost")
     ? "http://localhost:5000/api"
-    : "https://lunevia-be.vercel.app/api");
+    : "/api");
 
 // In-browser image compressor: scales high-res photos to max 1600px & ~300KB
 // Prevents multiple photos from ever exceeding Vercel's 4.5MB serverless payload limit
