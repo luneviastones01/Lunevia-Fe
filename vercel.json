@@ -17,6 +17,7 @@
     }
   ],
   "rewrites": [
+    { "source": "/sitemap.xml", "destination": "https://lunevia-be.vercel.app/sitemap.xml" },
     { "source": "/api/:match*", "destination": "https://lunevia-be.vercel.app/api/:match*" },
     { "source": "/uploads/:match*", "destination": "https://lunevia-be.vercel.app/uploads/:match*" },
     { "source": "/(.*)", "destination": "/index.html" }

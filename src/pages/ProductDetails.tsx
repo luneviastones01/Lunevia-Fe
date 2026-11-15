@@ -87,8 +87,12 @@ export default function ProductDetails() {
           "@type": "Product",
           name: product.name,
           category: product.category,
-          image: allImages,
-          description: product.description,
+          image: allImages && allImages.length > 0 ? allImages : [currentImage],
+          description:
+            product.description ||
+            `Exquisite natural ${product.name} piece from LUNÉVIA. Ethically sourced and handcrafted agate & mineral gemstone.`,
+          sku: product.id,
+          mpn: product.id,
           brand: {
             "@type": "Brand",
             name: "LUNÉVIA",
@@ -96,9 +100,13 @@ export default function ProductDetails() {
           offers: {
             "@type": "Offer",
             availability: "https://schema.org/InStock",
-            price: "0",
+            itemCondition: "https://schema.org/NewCondition",
+            price: product.price && product.price > 0 ? String(product.price) : "0",
             priceCurrency: "USD",
-            url: typeof window !== "undefined" ? window.location.href : "",
+            url:
+              typeof window !== "undefined"
+                ? window.location.href
+                : `https://www.xn--shoplunvia-h7a.com/product/${product.id}`,
             seller: {
               "@type": "Organization",
               name: "LUNÉVIA",
@@ -150,7 +158,7 @@ export default function ProductDetails() {
                   <div key={idx} className="w-full h-full flex-shrink-0 flex items-center justify-center relative overflow-hidden bg-black/40">
                     <img
                       src={img}
-                      alt={`${product.name} - View ${idx + 1}`}
+                      alt={`${product.name} — Natural ${product.category} Specimen ${idx + 1} by LUNÉVIA`}
                       decoding="async"
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
