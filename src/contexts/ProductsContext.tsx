@@ -134,6 +134,7 @@ export function ProductsProvider({
 
       return {
         id: p._id || p.id,
+        slug: p.slug || (p.name ? p.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") : (p._id || p.id)),
         name: p.name,
         price: p.price || 0,
         category: typeof p.category === "object" && p.category?.name ? p.category.name : (p.category || "Product"),

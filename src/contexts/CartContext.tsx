@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 export interface CartItem {
   id: string;
+  slug?: string;
   name: string;
   category: string;
   image: string;
@@ -88,6 +89,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         ...prev,
         {
           id: product.id,
+          slug: product.slug,
           name: product.name,
           category: product.category,
           image: product.image,

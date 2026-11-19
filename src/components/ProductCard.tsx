@@ -27,7 +27,7 @@ export default function ProductCard({ product, index = 0 }: Props) {
   return (
     <div id={`product-card-${product.id}`} className="group block relative">
       <Link
-        to={`/product/${product.id}`}
+        to={`/product/${product.slug || product.id}`}
         state={{ from: currentPath }}
         onClick={handleCardClick}
         className="block"
@@ -53,7 +53,7 @@ export default function ProductCard({ product, index = 0 }: Props) {
 
       <div className="mt-3 md:mt-4 flex items-center justify-between gap-3">
         <Link
-          to={`/product/${product.id}`}
+          to={`/product/${product.slug || product.id}`}
           state={{ from: currentPath }}
           onClick={handleCardClick}
           className="space-y-0.5 flex-1 min-w-0"

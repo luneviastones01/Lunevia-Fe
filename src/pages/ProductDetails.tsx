@@ -16,7 +16,9 @@ export default function ProductDetails() {
   const { addToCart } = useCart();
   const [copied, setCopied] = useState(false);
 
-  const product = products.find((p) => p.id === id);
+  const product = products.find(
+    (p) => p.slug === id || p.id === id || (p.name && p.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") === id)
+  );
   const relatedProducts = product
     ? products.filter((p) => p.id !== product.id && p.category.toLowerCase() === product.category.toLowerCase())
     : [];
@@ -106,7 +108,7 @@ export default function ProductDetails() {
             url:
               typeof window !== "undefined"
                 ? window.location.href
-                : `https://www.xn--shoplunvia-h7a.com/product/${product.id}`,
+                : `https://www.xn--shoplunvia-h7a.com/product/${product.slug || product.id}`,
             seller: {
               "@type": "Organization",
               name: "LUNÉVIA",

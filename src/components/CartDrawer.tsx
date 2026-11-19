@@ -123,7 +123,7 @@ export default function CartDrawer() {
                     >
                       {/* Thumbnail */}
                       <Link
-                        to={`/product/${item.id}`}
+                        to={`/product/${item.slug || item.id}`}
                         onClick={closeCart}
                         className="w-20 h-20 rounded-lg overflow-hidden bg-surface shrink-0 border border-border/40 relative block"
                       >
@@ -140,7 +140,7 @@ export default function CartDrawer() {
                         <div>
                           <div className="flex items-start justify-between gap-2">
                             <Link
-                              to={`/product/${item.id}`}
+                              to={`/product/${item.slug || item.id}`}
                               onClick={closeCart}
                               className="font-display text-sm font-medium text-foreground hover:text-gold transition-colors truncate block"
                             >
