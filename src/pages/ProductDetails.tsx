@@ -3,7 +3,7 @@ import { useProducts } from "@/contexts/ProductsContext";
 import { useCart } from "@/contexts/CartContext";
 import { ArrowLeft, MessageCircle, Share2, Sparkles, Check, ShieldCheck, Gem, Globe, ChevronLeft, ChevronRight, ZoomIn, X, ShoppingBag } from "lucide-react";
 import { siteConfig } from "@/config/site";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import SEO from "@/components/SEO";
 import ProductCard from "@/components/ProductCard";
@@ -27,6 +27,13 @@ export default function ProductDetails() {
     : (product?.image ? [product.image] : ["/placeholder.svg"]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isZoomOpen, setIsZoomOpen] = useState(false);
+  const [isDescExpanded, setIsDescExpanded] = useState(false);
+
+  useEffect(() => {
+    setIsDescExpanded(false);
+    setActiveIndex(0);
+  }, [id]);
+
   const currentImage = allImages[activeIndex] || allImages[0];
   const location = useLocation();
   const fromPath = (location.state as any)?.from;
@@ -252,9 +259,30 @@ export default function ProductDetails() {
               <h3 className="text-xs uppercase tracking-[0.2em] font-body text-gold/90 mb-2 font-medium">
                 Product Details &amp; Specifications
               </h3>
-              <p className="text-sm text-foreground/80 leading-relaxed font-body">
-                {product.description || "A natural gemstone masterpiece, carefully selected for its distinctive crystalline banding and mineral purity."}
-              </p>
+              {product.description && product.description.length > 200 ? (
+                <div>
+                  {isDescExpanded ? (
+                    <div className="max-h-48 md:max-h-56 overflow-y-auto pr-2 text-sm text-foreground/80 leading-relaxed font-body whitespace-pre-line">
+                      {product.description}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-foreground/80 leading-relaxed font-body line-clamp-3">
+                      {product.description}
+                    </p>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setIsDescExpanded((prev) => !prev)}
+                    className="mt-2.5 text-xs uppercase tracking-widest font-body font-medium text-gold hover:text-gold-light transition-colors inline-flex items-center gap-1 cursor-pointer"
+                  >
+                    {isDescExpanded ? "Read Less ↑" : "Read More ↓"}
+                  </button>
+                </div>
+              ) : (
+                <p className="text-sm text-foreground/80 leading-relaxed font-body whitespace-pre-line">
+                  {product.description || "A natural gemstone masterpiece, carefully selected for its distinctive crystalline banding and mineral purity."}
+                </p>
+              )}
             </div>
 
             {/* Collector Highlights */}
